@@ -1,5 +1,5 @@
 {
-  "name": "sortify_loom",
+  "name": "afghany/sortify-loom",
   "description": "The Laravel Dynamic Filters and Sorts package is a powerful utility service designed to simplify the handling of dynamic filtering and sorting of data in your Laravel applications. With this package, you can effortlessly implement customizable and dynamic filters and sorts, making it easier to provide a seamless and tailored user experience.",
   "type": "library",
   "license": "MIT",
