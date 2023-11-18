@@ -17,5 +17,6 @@
       "name": "Muhammad Reda",
       "email": "muhammadreda97@gmail.com"
     }
-  ]
+  ],
+  "minimum-stability": "stable"
 }
