@@ -2,20 +2,25 @@
 
 namespace SortifyLoom\Utilities\Filters\Units;
 
+use Illuminate\Contracts\Database\Query\Builder;
 use SortifyLoom\Utilities\Filters\Units\Conditions\AggregationCondition;
 use SortifyLoom\Utilities\Filters\Units\Conditions\BaseCondition;
+use SortifyLoom\Utilities\Filters\Units\Conditions\BetweenCondition;
 use SortifyLoom\Utilities\Filters\Units\Conditions\Condition;
+use SortifyLoom\Utilities\Filters\Units\Conditions\GroupConditions;
 use SortifyLoom\Utilities\Filters\Units\Conditions\InCondition;
+use SortifyLoom\Utilities\Filters\Units\Conditions\JsonContainCondition;
+use SortifyLoom\Utilities\Filters\Units\Conditions\JsonLengthCondition;
 use SortifyLoom\Utilities\Filters\Units\Conditions\NotInCondition;
 use SortifyLoom\Utilities\Filters\Units\Conditions\NotNullCondition;
 use SortifyLoom\Utilities\Filters\Units\Conditions\NullCondition;
+use SortifyLoom\Utilities\Filters\Units\Conditions\WhenCondition;
 use SortifyLoom\Utilities\Filters\Units\Joins\ClosureJoin;
 use SortifyLoom\Utilities\Filters\Units\Joins\Join;
 use SortifyLoom\Utilities\Filters\Units\Joins\NormalJoin;
 use SortifyLoom\Utilities\Sorts\Abstractions\Sort;
 use SortifyLoom\Utilities\Sorts\Units\BasicSort;
 use SortifyLoom\Utilities\Sorts\Units\RawSort;
-use Illuminate\Contracts\Database\Query\Builder;
 
 class Criteria
 {
@@ -116,16 +121,35 @@ class Criteria
     {
         foreach ($conditions as $condition) {
             match (get_class($condition)) {
+                GroupConditions::class => $this->applyGroupConditions($builder, $condition),
+                WhenCondition::class => $this->applyWhenCondition($builder, $condition),
                 NullCondition::class => $this->applyNullCondition($builder, $condition),
                 NotNullCondition::class => $this->applyNotNullCondition($builder, $condition),
                 Condition::class => $this->applyCondition($builder, $condition),
                 AggregationCondition::class => $this->applyAggregationCondition($builder, $condition),
                 InCondition::class => $this->applyInCondition($builder, $condition),
-                NotInCondition::class => $this->applyNotInCondition($builder, $condition)
+                NotInCondition::class => $this->applyNotInCondition($builder, $condition),
+                BetweenCondition::class => $this->applyBetweenCondition($builder, $condition),
+                JsonContainCondition::class => $this->applyJsonContainCondition($builder, $condition),
+                JsonLengthCondition::class => $this->applyJsonLengthCondition($builder, $condition)
             };
         }
 
         return $this;
+    }
+
+    private function applyGroupConditions(Builder $builder, GroupConditions $condition): void
+    {
+        $builder->where(function ($query) use ($condition) {
+            $this->applyConditions($condition->conditions, $query);
+        });
+    }
+
+    private function applyWhenCondition(Builder $builder, WhenCondition $condition): void
+    {
+        $builder->when($condition->verification, function ($query) use ($condition) {
+            $this->applyConditions([$condition->condition], $query);
+        });
     }
 
     private function applyNullCondition(Builder $builder, NullCondition $condition): void
@@ -160,6 +184,25 @@ class Criteria
     private function applyNotInCondition(Builder $builder, NotInCondition $condition): void
     {
         $builder->whereNotIn($condition->field, $condition->values);
+    }
+
+    private function applyBetweenCondition(Builder $builder, BetweenCondition $condition): void
+    {
+        $builder->whereBetween($condition->field, $condition->values);
+    }
+
+    private function applyJsonContainCondition(Builder $builder, JsonContainCondition $condition): void
+    {
+        $builder->whereRaw("JSON_CONTAINS($condition->field,'$condition->value')");
+    }
+
+    private function applyJsonLengthCondition(Builder $builder, JsonLengthCondition $condition): void
+    {
+        if ($condition->isOr) {
+            $builder->orWhereRaw("JSON_LENGTH($condition->field) $condition->operator $condition->value");
+        } else {
+            $builder->whereRaw("JSON_LENGTH($condition->field) $condition->operator $condition->value");
+        }
     }
 
     public function applySorts(Builder $builder): self

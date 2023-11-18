@@ -2,8 +2,11 @@
 
 namespace SortifyLoom\Utilities\Filters\Units\Conditions;
 
-class GroupCondition extends BaseCondition
+class GroupConditions extends BaseCondition
 {
+    /**
+     * @param array $conditions
+     */
     public function __construct(public readonly array $conditions)
     {
     }

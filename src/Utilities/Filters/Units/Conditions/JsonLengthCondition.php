@@ -2,7 +2,7 @@
 
 namespace SortifyLoom\Utilities\Filters\Units\Conditions;
 
-class Condition extends BaseCondition
+class JsonLengthCondition extends BaseCondition
 {
     /**
      * @param string $field
