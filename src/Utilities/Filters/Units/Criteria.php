@@ -15,6 +15,7 @@ use SortifyLoom\Utilities\Filters\Units\Conditions\JsonLengthCondition;
 use SortifyLoom\Utilities\Filters\Units\Conditions\NotInCondition;
 use SortifyLoom\Utilities\Filters\Units\Conditions\NotNullCondition;
 use SortifyLoom\Utilities\Filters\Units\Conditions\NullCondition;
+use SortifyLoom\Utilities\Filters\Units\Conditions\RawCondition;
 use SortifyLoom\Utilities\Filters\Units\Conditions\WhenCondition;
 use SortifyLoom\Utilities\Filters\Units\Joins\ClosureJoin;
 use SortifyLoom\Utilities\Filters\Units\Joins\Join;
@@ -132,7 +133,8 @@ class Criteria
                 NotInCondition::class => $this->applyNotInCondition($builder, $condition),
                 BetweenCondition::class => $this->applyBetweenCondition($builder, $condition),
                 JsonContainCondition::class => $this->applyJsonContainCondition($builder, $condition),
-                JsonLengthCondition::class => $this->applyJsonLengthCondition($builder, $condition)
+                JsonLengthCondition::class => $this->applyJsonLengthCondition($builder, $condition),
+                RawCondition::class => $this->applyRawCondition($builder, $condition),
             };
         }
 
@@ -222,5 +224,10 @@ class Criteria
             }
         }
         return $this;
+    }
+
+    private function applyRawCondition(Builder $builder, RawCondition $condition): void
+    {
+        $builder->whereRaw($condition->expression, $condition->bindings);
     }
 }
