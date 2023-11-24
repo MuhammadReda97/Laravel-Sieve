@@ -6,9 +6,9 @@ class WhenCondition extends BaseCondition
 {
     /**
      * @param bool $verification
-     * @param string $condition
+     * @param BaseCondition $condition
      */
-    public function __construct(public bool $verification, public readonly mixed $condition)
+    public function __construct(public bool $verification, public readonly BaseCondition $condition)
     {
     }
 }

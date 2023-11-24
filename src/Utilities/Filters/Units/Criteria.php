@@ -3,6 +3,7 @@
 namespace SortifyLoom\Utilities\Filters\Units;
 
 use Illuminate\Contracts\Database\Query\Builder;
+use SortifyLoom\Utilities\Enums\Conditions\GroupConditionTypeEnum;
 use SortifyLoom\Utilities\Filters\Units\Conditions\AggregationCondition;
 use SortifyLoom\Utilities\Filters\Units\Conditions\BaseCondition;
 use SortifyLoom\Utilities\Filters\Units\Conditions\BetweenCondition;
@@ -140,7 +141,8 @@ class Criteria
 
     private function applyGroupConditions(Builder $builder, GroupConditions $condition): void
     {
-        $builder->where(function ($query) use ($condition) {
+        $method = $condition->type == GroupConditionTypeEnum::AGGREGATION ? 'having' : 'where';
+        $builder->$method(function ($query) use ($condition) {
             $this->applyConditions($condition->conditions, $query);
         });
     }
@@ -173,7 +175,11 @@ class Criteria
 
     private function applyAggregationCondition(Builder $builder, AggregationCondition $condition): void
     {
-        $builder->having($condition->field, $condition->operator, $condition->value);
+        if ($condition->isOr) {
+            $builder->orHaving($condition->field, $condition->operator, $condition->value);
+        } else {
+            $builder->having($condition->field, $condition->operator, $condition->value);
+        }
     }
 
     private function applyInCondition(Builder $builder, InCondition $condition): void
