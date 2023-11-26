@@ -8,6 +8,7 @@ use SortifyLoom\Utilities\Filters\Units\Conditions\AggregationCondition;
 use SortifyLoom\Utilities\Filters\Units\Conditions\BaseCondition;
 use SortifyLoom\Utilities\Filters\Units\Conditions\BetweenCondition;
 use SortifyLoom\Utilities\Filters\Units\Conditions\Condition;
+use SortifyLoom\Utilities\Filters\Units\Conditions\DateCondition;
 use SortifyLoom\Utilities\Filters\Units\Conditions\GroupConditions;
 use SortifyLoom\Utilities\Filters\Units\Conditions\InCondition;
 use SortifyLoom\Utilities\Filters\Units\Conditions\JsonContainCondition;
@@ -135,6 +136,7 @@ class Criteria
                 JsonContainCondition::class => $this->applyJsonContainCondition($builder, $condition),
                 JsonLengthCondition::class => $this->applyJsonLengthCondition($builder, $condition),
                 RawCondition::class => $this->applyRawCondition($builder, $condition),
+                DateCondition::class => $this->applyDateCondition($builder, $condition),
             };
         }
 
@@ -229,5 +231,14 @@ class Criteria
     private function applyRawCondition(Builder $builder, RawCondition $condition): void
     {
         $builder->whereRaw($condition->expression, $condition->bindings);
+    }
+
+    private function applyDateCondition(Builder $builder, DateCondition $condition): void
+    {
+        if ($condition->isOr) {
+            $builder->orWhereDate($condition->field, $condition->operator, $condition->value);
+        } else {
+            $builder->whereDate($condition->field, $condition->operator, $condition->value);
+        }
     }
 }
