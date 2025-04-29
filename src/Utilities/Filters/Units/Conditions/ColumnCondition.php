@@ -4,10 +4,10 @@ namespace RedaLabs\LaravelFilters\Utilities\Filters\Units\Conditions;
 
 use Illuminate\Contracts\Database\Query\Builder;
 
-class DateCondition extends Condition
+class ColumnCondition extends Condition
 {
     public function apply(Builder $builder): void
     {
-        $builder->whereDate($this->field, $this->operator, $this->value, $this->boolean);
+        $builder->whereColumn($this->field, $this->operator, $this->value, $this->boolean);
     }
 }

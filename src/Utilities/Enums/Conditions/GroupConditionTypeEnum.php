@@ -1,6 +1,6 @@
 <?php
 
-namespace SortifyLoom\Utilities\Enums\Conditions;
+namespace RedaLabs\LaravelFilters\Utilities\Enums\Conditions;
 
 enum GroupConditionTypeEnum: string
 {

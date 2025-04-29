@@ -1,6 +1,6 @@
 <?php
 
-namespace SortifyLoom\Utilities\Exceptions\Conditions;
+namespace RedaLabs\LaravelFilters\Utilities\Exceptions\Conditions;
 
 use Exception;
 

@@ -1,17 +1,18 @@
 <?php
 
-namespace SortifyLoom\Utilities\Filters\Abstractions;
+namespace RedaLabs\LaravelFilters\Utilities\Filters\Abstractions;
 
-use SortifyLoom\Utilities\Filters\Units\Criteria;
+use RedaLabs\LaravelFilters\Utilities\Filters\Units\Criteria;
 
 abstract class Filter
 {
     protected string $field;
 
-    public abstract static function filter(Criteria $criteria, mixed $value): void;
-
     public function setField(string $field): void
     {
+        // todo check use-case.
         $this->field = $field;
     }
+
+    public abstract function filter(Criteria $criteria, mixed $value): void;
 }

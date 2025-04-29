@@ -1,7 +1,10 @@
 <?php
 
-namespace SortifyLoom\Utilities\Sorts\Abstractions;
+namespace RedaLabs\LaravelFilters\Utilities\Sorts\Abstractions;
 
-class Sort
+use Illuminate\Contracts\Database\Query\Builder;
+
+abstract class Sort
 {
+    abstract public function apply(Builder $builder): void;
 }

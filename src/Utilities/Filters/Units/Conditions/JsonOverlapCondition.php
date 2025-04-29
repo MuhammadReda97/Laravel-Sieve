@@ -4,12 +4,12 @@ namespace RedaLabs\LaravelFilters\Utilities\Filters\Units\Conditions;
 
 use Illuminate\Contracts\Database\Query\Builder;
 
-class JsonContainCondition extends BaseCondition
+class JsonOverlapCondition extends BaseCondition
 {
     /**
      * @param string $field
      * @param mixed $value
-     * @param bool $isOr
+     * @param string $boolean
      */
     public function __construct(public readonly string $field, public readonly mixed $value, string $boolean = 'and',public readonly bool $not = false)
     {
@@ -18,6 +18,6 @@ class JsonContainCondition extends BaseCondition
 
     public function apply(Builder $builder): void
     {
-        $builder->whereJsonContains($this->field, $this->value, $this->boolean, $this->not);
+        $builder->whereJsonOverlaps($this->field, $this->value, $this->boolean, $this->not);
     }
 }

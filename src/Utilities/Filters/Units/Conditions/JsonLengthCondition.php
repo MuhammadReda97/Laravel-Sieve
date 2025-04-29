@@ -1,16 +1,13 @@
 <?php
 
-namespace SortifyLoom\Utilities\Filters\Units\Conditions;
+namespace RedaLabs\LaravelFilters\Utilities\Filters\Units\Conditions;
 
-class JsonLengthCondition extends BaseCondition
+use Illuminate\Contracts\Database\Query\Builder;
+
+class JsonLengthCondition extends Condition
 {
-    /**
-     * @param string $field
-     * @param string $operator
-     * @param mixed $value
-     * @param bool $isOr
-     */
-    public function __construct(public readonly string $field, public readonly string $operator, public readonly mixed $value, public readonly bool $isOr = false)
+    public function apply(Builder $builder): void
     {
+        $builder->whereJsonLength($this->field, $this->operator, $this->value, $this->boolean);
     }
 }

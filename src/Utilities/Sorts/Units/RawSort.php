@@ -1,12 +1,19 @@
 <?php
 
-namespace SortifyLoom\Utilities\Sorts\Units;
+namespace RedaLabs\LaravelFilters\Utilities\Sorts\Units;
 
-use SortifyLoom\Utilities\Sorts\Abstractions\Sort;
+use Illuminate\Contracts\Database\Query\Builder;
+use RedaLabs\LaravelFilters\Utilities\Sorts\Abstractions\Sort;
 
 class RawSort extends Sort
 {
-    public function __construct(public readonly string $expression)
+    public function __construct(public readonly string $expression,
+                                public readonly array  $bindings = [])
     {
+    }
+
+    public function apply(Builder $builder): void
+    {
+        $builder->orderByRaw($this->expression, $this->bindings);
     }
 }
