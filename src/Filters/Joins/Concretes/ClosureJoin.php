@@ -4,6 +4,7 @@ namespace RedaLabs\LaravelFilters\Filters\Joins\Concretes;
 
 use Closure;
 use Illuminate\Contracts\Database\Query\Builder;
+use RedaLabs\LaravelFilters\Enums\Joins\JoinTypeEnum;
 use RedaLabs\LaravelFilters\Filters\Joins\Contracts\BaseJoin;
 
 class ClosureJoin extends BaseJoin
@@ -14,7 +15,7 @@ class ClosureJoin extends BaseJoin
      * @param string $type
      * @param string|null $name
      */
-    public function __construct(string $table, public readonly Closure $closure, string $type = 'inner', ?string $name = null)
+    public function __construct(string $table, public readonly Closure $closure, string $type = JoinTypeEnum::INNER->value, ?string $name = null)
     {
         parent::__construct($table, $type, $name);
     }

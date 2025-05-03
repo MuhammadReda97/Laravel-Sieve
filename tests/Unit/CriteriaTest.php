@@ -2,33 +2,23 @@
 
 namespace Tests\Unit;
 
-use Illuminate\Database\Connection;
-use Illuminate\Database\Query\Builder;
-use Illuminate\Database\Query\Grammars\Grammar;
-use Illuminate\Database\Query\Processors\Processor;
-use PHPUnit\Framework\TestCase;
 use RedaLabs\LaravelFilters\Criteria;
 use RedaLabs\LaravelFilters\Filters\Conditions\Concretes\Condition;
 use RedaLabs\LaravelFilters\Filters\Joins\Concretes\Join;
 use RedaLabs\LaravelFilters\Sorts\Concretes\Sort;
+use Tests\TestCase;
 
 class CriteriaTest extends TestCase
 {
     private Criteria $criteria;
-    private Builder $builder;
 
     protected function setUp(): void
     {
         parent::setUp();
         $this->criteria = new Criteria();
-
-        $connection = $this->createMock(Connection::class);
-        $grammar = new Grammar($connection);
-        $processor = new Processor();
-        $this->builder = new Builder($connection, $grammar, $processor);
     }
 
-    public function testAppendJoin()
+    public function test_append_join()
     {
         $join = new Join('test_join', 'test_table.column', '=', 'test_join.column');
 
@@ -39,7 +29,7 @@ class CriteriaTest extends TestCase
         $this->assertCount(1, $joins);
     }
 
-    public function testAppendJoinWithCustomSortOrder()
+    public function test_append_join_with_custom_sort_order()
     {
         $join = new Join('test_join', 'test_table.column', '=', 'test_join.column');
         $customSort = 200;
@@ -50,7 +40,7 @@ class CriteriaTest extends TestCase
         $this->assertEquals($customSort, $joins['test_join']['order']);
     }
 
-    public function testRemoveJoinIfExists()
+    public function test_remove_join_if_exists()
     {
         $join = new Join('test_join', 'test_table.column', '=', 'test_join.column');
 
@@ -62,14 +52,14 @@ class CriteriaTest extends TestCase
         $this->assertCount(0, $joins);
     }
 
-    public function testRemoveNonExistentJoin()
+    public function test_remove_non_existent_join()
     {
         $this->criteria->removeJoinIfExists('non_existent_join');
         $joins = $this->getPrivateProperty($this->criteria, 'joins');
         $this->assertCount(0, $joins);
     }
 
-    public function testAppendCondition()
+    public function test_append_condition()
     {
         $condition = new Condition('column', '=', 'value');
 
@@ -80,7 +70,7 @@ class CriteriaTest extends TestCase
         $this->assertSame($condition, $conditions[0]);
     }
 
-    public function testAppendSort()
+    public function test_append_sort()
     {
         $sort = new Sort('column_name', 'asc');
 
@@ -91,7 +81,7 @@ class CriteriaTest extends TestCase
         $this->assertSame($sort, $sorts['column_name']);
     }
 
-    public function testApplyOnBuilderWithAllComponents()
+    public function test_apply_on_builder_with_all_components()
     {
         // Create test components
         $join = new Join('users', 'users.id', '=', 'posts.user_id');
@@ -117,7 +107,7 @@ class CriteriaTest extends TestCase
         $this->assertStringContainsString('order by "users"."name" asc', strtolower($sql));
     }
 
-    public function testApplyOnBuilderWithMultipleJoinsOrdersCorrectly()
+    public function test_apply_on_builder_with_multiple_joins_orders_correctly()
     {
         $join1 = new Join('users', 'users.id', '=', 'posts.user_id');
         $join2 = new Join('profiles', 'profiles.user_id', '=', 'users.id');
@@ -135,7 +125,7 @@ class CriteriaTest extends TestCase
         $this->assertLessThan($join1Pos, $join2Pos);
     }
 
-    public function testApplyOnBuilderWithNoComponents()
+    public function test_apply_on_builder_with_no_components()
     {
         $result = $this->criteria->applyOnBuilder($this->builder);
         $sql = $this->builder
@@ -145,7 +135,7 @@ class CriteriaTest extends TestCase
         $this->assertEquals('select *', strtolower($sql));
     }
 
-    public function testApplyJoinsOrdersBySortKey()
+    public function test_apply_joins_orders_by_sort_key()
     {
         $join1 = new Join('join1', 'table1.column', '=', 'join1.column');
         $join2 = new Join('join2', 'table2.column', '=', 'join2.column');
@@ -159,7 +149,7 @@ class CriteriaTest extends TestCase
         $this->assertEquals(200, $joins['join1']['order']);
     }
 
-    public function testApplyConditions()
+    public function test_apply_conditions()
     {
         $condition1 = new Condition('column1', '=', 'value1');
         $condition2 = new Condition('column2', '=', 'value2');
@@ -173,7 +163,7 @@ class CriteriaTest extends TestCase
         $this->assertSame($condition2, $conditions[1]);
     }
 
-    public function testApplySorts()
+    public function test_apply_sorts()
     {
         $sort1 = new Sort('column1', 'asc');
         $sort2 = new Sort('column2', 'desc');
@@ -185,13 +175,5 @@ class CriteriaTest extends TestCase
         $this->assertCount(2, $sorts);
         $this->assertSame($sort1, $sorts['column1']);
         $this->assertSame($sort2, $sorts['column2']);
-    }
-
-    private function getPrivateProperty(object $object, string $property)
-    {
-        $reflection = new \ReflectionClass($object);
-        $property = $reflection->getProperty($property);
-        $property->setAccessible(true);
-        return $property->getValue($object);
     }
 }

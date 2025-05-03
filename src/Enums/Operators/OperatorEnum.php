@@ -19,7 +19,7 @@ enum OperatorEnum: string
         return !is_null(self::tryFrom(strtoupper(trim($operator))));
     }
 
-    public static function getValues(): array
+    public static function values(): array
     {
         return array_column(self::cases(), 'value');
     }

@@ -7,8 +7,7 @@ use RedaLabs\LaravelFilters\Enums\Operators\OperatorEnum;
 
 class OperatorEnumTest extends TestCase
 {
-    /** @test */
-    public function it_has_all_required_operators(): void
+    public function test_it_has_all_required_operators(): void
     {
         $expectedOperators = [
             '=' => 'EQUALS',
@@ -28,8 +27,7 @@ class OperatorEnumTest extends TestCase
         }
     }
 
-    /** @test */
-    public function it_validates_operators_correctly(): void
+    public function test_it_validates_operators_correctly(): void
     {
         $this->assertTrue(OperatorEnum::isValid('='));
         $this->assertTrue(OperatorEnum::isValid('!='));
@@ -45,10 +43,9 @@ class OperatorEnumTest extends TestCase
         $this->assertFalse(OperatorEnum::isValid(''));
     }
 
-    /** @test */
-    public function it_returns_all_values(): void
+    public function test_it_returns_all_values(): void
     {
-        $values = OperatorEnum::getValues();
+        $values = OperatorEnum::values();
 
         $this->assertIsArray($values);
         $this->assertNotEmpty($values);
@@ -63,16 +60,14 @@ class OperatorEnumTest extends TestCase
         $this->assertContains('NOT LIKE', $values);
     }
 
-    /** @test */
-    public function it_handles_case_insensitive_validation(): void
+    public function test_it_handles_case_insensitive_validation(): void
     {
         $this->assertTrue(OperatorEnum::isValid('LIKE'));
         $this->assertTrue(OperatorEnum::isValid('Like'));
         $this->assertTrue(OperatorEnum::isValid('like'));
     }
 
-    /** @test */
-    public function it_handles_whitespace_in_validation(): void
+    public function test_it_handles_whitespace_in_validation(): void
     {
         $this->assertTrue(OperatorEnum::isValid(' not like '));
         $this->assertTrue(OperatorEnum::isValid('not like'));

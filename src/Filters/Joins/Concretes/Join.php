@@ -3,6 +3,7 @@
 namespace RedaLabs\LaravelFilters\Filters\Joins\Concretes;
 
 use Illuminate\Contracts\Database\Query\Builder;
+use RedaLabs\LaravelFilters\Enums\Joins\JoinTypeEnum;
 use RedaLabs\LaravelFilters\Enums\Operators\OperatorEnum;
 use RedaLabs\LaravelFilters\Exceptions\Operators\InvalidOperatorException;
 use RedaLabs\LaravelFilters\Filters\Conditions\Contracts\BaseCondition;
@@ -24,7 +25,7 @@ class Join extends BaseJoin
      * @param string|null $name
      * @throws InvalidOperatorException
      */
-    public function __construct(string $table, public readonly string $first, public readonly string $operator, public readonly string $second, string $type = 'inner', ?string $name = null)
+    public function __construct(string $table, public readonly string $first, public readonly string $operator, public readonly string $second, string $type = JoinTypeEnum::INNER->value, ?string $name = null)
     {
         if (!OperatorEnum::isValid($operator)) {
             throw new InvalidOperatorException($operator);

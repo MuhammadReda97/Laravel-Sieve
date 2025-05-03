@@ -3,10 +3,10 @@
 namespace Test\Unit;
 
 use Illuminate\Http\Request;
-use PHPUnit\Framework\TestCase;
 use RedaLabs\LaravelFilters\Criteria;
 use RedaLabs\LaravelFilters\Enums\Sorts\SortDirectionEnum;
 use RedaLabs\LaravelFilters\Sorts\Contracts\BaseSort;
+use Tests\TestCase;
 use Tests\Unit\Core\ConcreteUtilitiesService;
 
 class UtilitiesServiceTest extends TestCase
@@ -19,7 +19,7 @@ class UtilitiesServiceTest extends TestCase
         $this->criteria = new Criteria;
     }
 
-    public function testGetCriteriaReturnsInjectedInstance()
+    public function test_get_criteria_returns_injected_instance()
     {
         $request = new Request();
         $service = new ConcreteUtilitiesService($this->criteria, $request);
@@ -27,7 +27,7 @@ class UtilitiesServiceTest extends TestCase
         $this->assertSame($this->criteria, $service->getCriteria());
     }
 
-    public function testFreshReturnsNewCriteriaInstance()
+    public function test_fresh_returns_new_criteria_instance()
     {
         $request = new Request(['name' => 'John']);
         $service = new ConcreteUtilitiesService($this->criteria, $request);
@@ -36,18 +36,17 @@ class UtilitiesServiceTest extends TestCase
         $this->assertNotSame($this->criteria, $service->fresh()->getCriteria());
     }
 
-    public function testApplyFiltersWithStringMethodFilter()
+    public function test_apply_filters_with_string_method_filter()
     {
         $request = new Request(['age' => 18]);
         $service = new ConcreteUtilitiesService($this->criteria, $request);
 
         $service->applyFilters();
 
-        // Verify the condition was added to criteria
         $this->assertCount(1, $this->getPrivateProperty($this->criteria, 'conditions'));
     }
 
-    public function testApplyFiltersWithFilterInstance()
+    public function test_apply_filters_with_filter_instance()
     {
         $request = new Request(['name' => 'Jon Doe']);
         $service = new ConcreteUtilitiesService($this->criteria, $request);
@@ -57,7 +56,7 @@ class UtilitiesServiceTest extends TestCase
         $this->assertCount(1, $this->getPrivateProperty($this->criteria, 'conditions'));
     }
 
-    public function testApplyFiltersSkipsEmptyValues()
+    public function test_apply_filters_skips_empty_values()
     {
         $request = new Request(['name' => '']);
         $service = new ConcreteUtilitiesService($this->criteria, $request);
@@ -67,7 +66,7 @@ class UtilitiesServiceTest extends TestCase
         $this->assertCount(0, $this->getPrivateProperty($this->criteria, 'conditions'));
     }
 
-    public function testApplyFiltersSkipsInvalidFilters()
+    public function test_apply_filters_skips_invalid_filters()
     {
         $request = new Request([
             'invalid_filter' => 'invalid_value',
@@ -80,8 +79,7 @@ class UtilitiesServiceTest extends TestCase
         $this->assertCount(0, $conditions);
     }
 
-
-    public function testApplySortsWithValidParameters()
+    public function test_apply_sorts_with_valid_parameters()
     {
         $request = new Request([
             'sorts' => [
@@ -97,7 +95,7 @@ class UtilitiesServiceTest extends TestCase
         $this->assertInstanceOf(BaseSort::class, current($sorts));
     }
 
-    public function testApplySortsWithCustomSortMethod()
+    public function test_apply_sorts_with_custom_sort_method()
     {
         $request = new Request([
             'sorts' => [
@@ -113,7 +111,7 @@ class UtilitiesServiceTest extends TestCase
         $this->assertCount(1, $sorts);
     }
 
-    public function testApplySortsWithDefaultDirection()
+    public function test_apply_sorts_with_default_direction()
     {
         $request = new Request([
             'sorts' => [
@@ -128,7 +126,7 @@ class UtilitiesServiceTest extends TestCase
         $this->assertEquals(SortDirectionEnum::default(), current($sorts)->direction);
     }
 
-    public function testApplySortsWithInvalidDirectionFallsBackToDefault()
+    public function test_apply_sorts_with_invalid_direction_falls_back_to_default()
     {
         $request = new Request([
             'sorts' => [
@@ -143,7 +141,7 @@ class UtilitiesServiceTest extends TestCase
         $this->assertEquals(SortDirectionEnum::default(), current($sorts)->direction);
     }
 
-    public function testApplySortsSkipsInvalidSortFields()
+    public function test_apply_sorts_skips_invalid_sort_fields()
     {
         $request = new Request([
             'sorts' => [
@@ -159,7 +157,7 @@ class UtilitiesServiceTest extends TestCase
         $this->assertCount(1, $sorts);
     }
 
-    public function testApplySortsDoesNothingWhenNoSortsInRequest()
+    public function test_apply_sorts_does_nothing_when_no_sorts_in_request()
     {
         $request = new Request();
         $service = new ConcreteUtilitiesService($this->criteria, $request);
@@ -169,7 +167,7 @@ class UtilitiesServiceTest extends TestCase
         $this->assertCount(0, $this->getPrivateProperty($this->criteria, 'sorts'));
     }
 
-    public function testSortsRespectConfiguredDefaultDirectionInService()
+    public function test_sorts_respect_configured_default_direction_in_service()
     {
         $request = new Request([
             'sorts' => [
@@ -187,14 +185,6 @@ class UtilitiesServiceTest extends TestCase
 
         $sorts = $this->getPrivateProperty($this->criteria, 'sorts');
         $this->assertEquals(SortDirectionEnum::ASC->value, current($sorts)->direction);
-    }
-
-    private function getPrivateProperty(object $object, string $property)
-    {
-        $reflection = new \ReflectionClass($object);
-        $property = $reflection->getProperty($property);
-        $property->setAccessible(true);
-        return $property->getValue($object);
     }
 
     private function setProperty(object $object, string $property, mixed $value)
