@@ -2,6 +2,7 @@
 
 namespace Unit\Joins;
 
+use Illuminate\Database\Query\Builder;
 use RedaLabs\LaravelFilters\Enums\Joins\JoinTypeEnum;
 use RedaLabs\LaravelFilters\Enums\Operators\OperatorEnum;
 use RedaLabs\LaravelFilters\Exceptions\Joins\InvalidJoinTypeException;
@@ -83,7 +84,7 @@ class JoinTest extends TestCase
         }
     }
 
-    public function test_join_not_accept_invalid_type()
+    public function test_join_not_accept_valid_type()
     {
         $this->expectException(InvalidJoinTypeException::class);
         new Join('posts', 'users.id', '=', 'posts.user_id', type: 'INVALID');
@@ -99,6 +100,19 @@ class JoinTest extends TestCase
 
         foreach ($cases as $typeName => $typeValue) {
             $join = new Join('posts', 'users.id', '=', 'posts.user_id', type: $typeValue);
+            $this->mockedBuilder = $this->getMockBuilder(Builder::class)
+                ->disableOriginalConstructor()
+                ->onlyMethods(['join'])
+                ->getMock();
+
+            $this->mockedBuilder->expects($this->once())
+                ->method('join')
+                ->with(
+                    'posts',
+                    $this->isInstanceOf(\Closure::class)
+                );
+
+            $join->apply($this->mockedBuilder);
             $join->apply($this->builder);
 
             $sql = $this->builder->toSql();

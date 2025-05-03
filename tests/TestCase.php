@@ -14,6 +14,8 @@ class TestCase extends BaseTestCase
 
     protected Builder $builder;
 
+    protected $mockedBuilder;
+
     protected function setUp(): void
     {
         parent::setUp();
@@ -24,6 +26,7 @@ class TestCase extends BaseTestCase
         $grammar = new Grammar($connection);
         $processor = new Processor();
         $this->builder = new Builder($connection, $grammar, $processor);
+        $this->mockedBuilder = $this->createMock(Builder::class);
     }
 
     protected function getPrivateProperty(object $object, string $property)

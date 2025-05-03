@@ -4,6 +4,7 @@ namespace RedaLabs\LaravelFilters\Filters\Conditions\Contracts;
 
 use Illuminate\Contracts\Database\Query\Builder;
 use RedaLabs\LaravelFilters\Enums\Conditions\LogicalOperatorEnum;
+use RedaLabs\LaravelFilters\Exceptions\Conditions\InvalidLogicalOperatorException;
 
 abstract class BaseCondition
 {
@@ -17,8 +18,7 @@ abstract class BaseCondition
     private function validateBoolean(string $boolean): void
     {
         if (!in_array($boolean, LogicalOperatorEnum::values())) {
-            $booleanValues = implode(', ', LogicalOperatorEnum::values());
-            throw new \InvalidArgumentException("Boolean must be one of {$booleanValues}.");
+            throw new InvalidLogicalOperatorException($boolean);
         }
     }
 }
