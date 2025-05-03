@@ -4,7 +4,8 @@ namespace RedaLabs\LaravelFilters\Filters\Conditions\Concretes;
 
 use Illuminate\Contracts\Database\Query\Builder;
 use RedaLabs\LaravelFilters\Enums\Conditions\GroupConditionTypeEnum;
-use RedaLabs\LaravelFilters\Exceptions\Conditions\InvalidGroupConditionException;
+use RedaLabs\LaravelFilters\Exceptions\Conditions\EmptyGroupConditionsException;
+use RedaLabs\LaravelFilters\Exceptions\Conditions\MixedGroupConditionException;
 use RedaLabs\LaravelFilters\Filters\Conditions\Contracts\BaseCondition;
 
 class GroupConditions extends BaseCondition
@@ -18,6 +19,9 @@ class GroupConditions extends BaseCondition
      */
     public function __construct(public readonly array $conditions, string $boolean = 'and')
     {
+        if (empty($this->conditions)){
+            throw new EmptyGroupConditionsException;
+        }
         $this->validateConditions($this->conditions);
         parent::__construct($boolean);
     }
@@ -39,7 +43,7 @@ class GroupConditions extends BaseCondition
         }
 
         if (!($aggregationConditionsCount == $conditionsCount || $aggregationConditionsCount == 0)) {
-            throw new InvalidGroupConditionException;
+            throw new MixedGroupConditionException;
         }
 
         $this->type = $aggregationConditionsCount == $conditionsCount ? GroupConditionTypeEnum::AGGREGATION->value : GroupConditionTypeEnum::BASIC->value;
