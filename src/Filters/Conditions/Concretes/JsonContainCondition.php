@@ -14,7 +14,7 @@ class JsonContainCondition extends BaseCondition
      * @param string $boolean
      * @param bool $not
      */
-    public function __construct(public readonly string $field, public readonly mixed $value, string $boolean = 'and',public readonly bool $not = false)
+    public function __construct(public readonly string $field, public readonly mixed $value, string $boolean = 'and', public readonly bool $not = false)
     {
         parent::__construct($boolean);
     }

@@ -39,11 +39,6 @@ class Join extends BaseJoin
         return $this;
     }
 
-    public function getConditions(): array
-    {
-        return $this->conditions;
-    }
-
     public function apply(Builder $builder): void
     {
         $builder->join($this->table, function (Builder $joinBuilder) {

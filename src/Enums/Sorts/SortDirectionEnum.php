@@ -9,7 +9,7 @@ enum SortDirectionEnum: string
 
     public static function default(): string
     {
-        return self::DESC->value;
+        return self::ASC->value;
     }
 
     public static function values(): array

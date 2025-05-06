@@ -13,13 +13,13 @@ class GroupConditions extends BaseCondition
     public readonly string $type;
 
     /**
-     * @param array $conditions
+     * @param BaseCondition[] $conditions
      * @param string $boolean
      * @throws \Exception
      */
     public function __construct(public readonly array $conditions, string $boolean = 'and')
     {
-        if (empty($this->conditions)){
+        if (empty($this->conditions)) {
             throw new EmptyGroupConditionsException;
         }
         $this->validateConditions($this->conditions);

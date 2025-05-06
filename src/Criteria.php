@@ -55,6 +55,11 @@ class Criteria
         return $this;
     }
 
+    public function isJoinExists(string $joinName): bool
+    {
+        return isset($this->joins[$joinName]);
+    }
+
     public function appendCondition(BaseCondition $condition): self
     {
         $this->conditions[] = $condition;
@@ -79,7 +84,7 @@ class Criteria
      * @param Builder $builder
      * @return self
      */
-    private function applyJoins(Builder $builder): self
+    public function applyJoins(Builder $builder): self
     {
         array_multisort(array_column($this->joins, $this->joinOrderKey), SORT_ASC, $this->joins);
         foreach ($this->joins as $joinName => $join) {
@@ -95,7 +100,7 @@ class Criteria
      * @param Builder $builder
      * @return self
      */
-    private function applyConditions(Builder $builder, array $conditions): self
+    public function applyConditions(Builder $builder, array $conditions): self
     {
         foreach ($conditions as $condition) {
             $condition->apply($builder);
