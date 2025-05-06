@@ -44,8 +44,12 @@ composer require redalabs/laravel-filters
     * [Defining Sorts](#defining-sorts)
 * [Using the Utilities Service](#using-the-utilities-service)
 * [Building the Query](#building-the-query)
-* [Advanced Notes](#advanced-notes)
 * [Components](#components)
+    * [Utilities Service](#utilitiesservice)
+    * [Criteria](#criteria)
+    * [Conditions](#condition)
+    * [Joins](#joins)
+    * [Sorts](#sorts)
 
 ---
 
@@ -271,7 +275,7 @@ class MyUtilitiesService extends UtilitiesService
 
 📌 If a method is not found for a sort key, the key itself will be used as the column name.
 
-📘 [Explore Available Sorts →](#)
+📘 [Explore Available Sorts →](#sorts)
 
 ---
 
@@ -318,6 +322,196 @@ class ProductRepository
 > ✅ You can use `applyOnBuilder()` anywhere you're building your query—not limited to repositories.
 
 # Components
+
+## UtilitiesService
+
+The `UtilitiesService` class is an abstract base class that provides a structured way to handle filtering and sorting in
+your Laravel applications. It acts as a bridge between HTTP requests and the Criteria class, making it easy to implement
+filtering and sorting functionality in your services.
+
+### Purpose
+
+The `UtilitiesService` class serves as a foundation for building filterable and sortable services. It allows you to:
+
+- Automatically process filter and sort parameters from HTTP requests.
+- Define available filters and sorts for your service.
+- Apply filters and sorts to your queries in a consistent way.
+
+### Available Methods
+
+#### `getCriteria(): Criteria`
+
+Returns the current Criteria instance.
+
+- Returns: The current Criteria instance
+
+#### `fresh(): self`
+
+Creates a new Criteria instance and resets the service.
+
+- Returns: The current service instance
+
+#### `applyFilters(): UtilitiesService`
+
+Applies all valid filters from the request to the Criteria instance.
+
+- Returns: The current service instance
+
+#### `applySorts(): self`
+
+Applies all valid sorts from the request to the Criteria instance.
+
+- Returns: The current service instance
+
+### Protected Methods to Override
+
+#### `filters(): array`
+
+Define the available filters for your service.
+
+- Returns: An array of filter keys and their corresponding filter classes or method names
+
+```php
+protected function filters(): array
+{
+    return [
+        'status' => StatusFilter::class,
+        'date_range' => 'applyDateRangeFilter',
+        'search' => SearchFilter::class
+    ];
+}
+```
+
+#### `sorts(): array`
+
+Define the available sorts for your service.
+
+- Returns: An array of sort keys and their corresponding field names or method names
+
+```php
+protected function sorts(): array
+{
+    return [
+        'created_at' => 'created_at',
+        'name' => 'users.name',
+        'custom_sort' => 'applyCustomSort'
+    ];
+}
+```
+
+### Usage Examples
+
+#### Basic Implementation
+
+```php
+use RedaLabs\LaravelFilters\UtilitiesService;
+use RedaLabs\LaravelFilters\Criteria;
+use Illuminate\Http\Request;
+
+class UserService extends UtilitiesService
+{
+    protected string $defaultSortDirection = 'desc';
+
+    public function __construct(Criteria $criteria, Request $request)
+    {
+        parent::__construct($criteria, $request);
+    }
+
+    protected function filters(): array
+    {
+        return [
+            'status' => StatusFilter::class,
+            'role' => RoleFilter::class,
+            'search' => 'applySearchFilter'
+        ];
+    }
+
+    protected function sorts(): array
+    {
+        return [
+            'name' => 'users.name',
+            'email' => 'users.email',
+            'created_at' => 'users.created_at'
+        ];
+    }
+
+    protected function applySearchFilter(Criteria $criteria, string $value): void
+    {
+        $criteria->appendCondition(new Condition('name', 'like', "%{$value}%"));
+    }
+}
+```
+
+#### Complex Implementation
+
+```php
+use RedaLabs\LaravelFilters\UtilitiesService;
+use RedaLabs\LaravelFilters\Criteria;
+use Illuminate\Http\Request;
+
+class PostService extends UtilitiesService
+{
+    protected string $defaultSortDirection = 'desc';
+    protected string $sortsKey = 'order_by'; // Customize the sort parameter key
+
+    public function __construct(Criteria $criteria, Request $request)
+    {
+        parent::__construct($criteria, $request);
+    }
+
+    protected function filters(): array
+    {
+        return [
+            'status' => StatusFilter::class,
+            'category' => CategoryFilter::class,
+            'date_range' => 'applyDateRangeFilter',
+            'author' => 'applyAuthorFilter',
+            'tags' => TagsFilter::class
+        ];
+    }
+
+    protected function sorts(): array
+    {
+        return [
+            'created_at' => 'posts.created_at',
+            'title' => 'posts.title',
+            'views' => 'applyViewsSort',
+            'popularity' => 'applyPopularitySort'
+        ];
+    }
+
+    protected function applyDateRangeFilter(Criteria $criteria, array $value): void
+    {
+        $criteria->appendCondition(new BetweenCondition(
+            'created_at',
+            [$value['start'], $value['end']]
+        ));
+    }
+
+    protected function applyAuthorFilter(Criteria $criteria, int $authorId): void
+    {
+        $criteria->appendJoin(new Join('users', 'id', '=', 'posts.user_id', 'inner'));
+        $criteria->appendCondition(new Condition('user_id', '=', $authorId));
+    }
+
+    protected function applyViewsSort(string $direction): BaseSort
+    {
+        return new RawSort('views_count + likes_count', [], $direction);
+    }
+
+    protected function applyPopularitySort(string $direction): BaseSort
+    {
+        return new RawSort('(views_count * 0.7) + (likes_count * 0.3)', [], $direction);
+    }
+}
+```
+
+### Best Practices
+
+- Create dedicated filter classes for complex or frequently reused filters.
+- Always validate filter and sort parameters to ensure data integrity.
+- Be mindful of security risks when handling user-provided input.
+- Keep filtering and sorting logic clean, focused, and limited to a single responsibility.
 
 ## Criteria
 
@@ -862,7 +1056,7 @@ to specify the join conditions and add additional conditions to the join clause.
        ->appendCondition(new Condition('categories.type', '=', 'main'));
    ```
 
-`apply(Builder $builder): void`
+`apply(Builder $builder): void` // todo check if remove internal methods.
 
 - Applies the join to the query builder
 - Internal method used by the package
