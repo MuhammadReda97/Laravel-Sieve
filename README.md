@@ -45,7 +45,7 @@ composer require redalabs/laravel-filters
 * [Using the Utilities Service](#using-the-utilities-service)
 * [Building the Query](#building-the-query)
 * [Components](#components)
-    * [Utilities Service](#utilitiesservice)
+    * [Utilities Service](#utilities-service)
     * [Criteria](#criteria)
     * [Conditions](#condition)
     * [Joins](#joins)
@@ -278,9 +278,6 @@ class MyUtilitiesService extends UtilitiesService
 📘 [Explore Available Sorts →](#sorts)
 
 ---
-
-// todo
-
 # Using the Utilities Service
 
 Inject and use it in your controller:
@@ -288,7 +285,7 @@ Inject and use it in your controller:
 ```php
 class ProductController extends Controller
 {
-    public function index(Request $request, MyUtilitiesService $utilitiesService)
+    public function index(Request $request, ProductUtilitiesService $utilitiesService)
     {
         $criteria = $utilitiesService
             ->applyFilters()
@@ -323,7 +320,7 @@ class ProductRepository
 
 # Components
 
-## UtilitiesService
+## Utilities Service
 
 The `UtilitiesService` class is an abstract base class that provides a structured way to handle filtering and sorting in
 your Laravel applications. It acts as a bridge between HTTP requests and the Criteria class, making it easy to implement
