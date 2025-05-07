@@ -65,7 +65,7 @@ use RedaLabs\LaravelFilters\UtilitiesService;
 class MyUtilitiesService extends UtilitiesService
 {
 }
-`````
+```
 
 ---
 
@@ -202,7 +202,7 @@ class MyUtilitiesService extends UtilitiesService
 
 You can reuse common filters across services by implementing the `Filter` interface:
 
-````php
+```php
 namespace App\Utilities\Filters;
 
 use RedaLabs\LaravelFilters\Filters\Contracts\Filter;
@@ -219,12 +219,14 @@ class ProductCategoryNameFilter implements Filter
         }
         $criteria->appendCondition(new Condition('product_categories.name', 'like', "%$value%"));
     }
-````
+}
+```
 
 To apply a reusable filter class in your service, simply register it in the `filters()` method:
 
-
 ```php
+namespace App\Utilities;
+
 use RedaLabs\LaravelFilters\UtilitiesService;
 use App\Utilities\Filters\ProductCategoryNameFilter;
 
@@ -238,12 +240,13 @@ class ProductUtilitiesService extends UtilitiesService
     }
 }
 ```
-📌 **Note:** If you need to reuse the same filter logic but apply it to `different columns`, consider modifying the filter class to accept a column name and use it dynamically in the `apply()` method.
 
+📌 **Note:** If you need to reuse the same filter logic but apply it to `different columns`, consider modifying the
+filter class to accept a column name and use it dynamically in the `apply()` method.
 
 You can reuse it in other services too:
 
-````php
+```php
 use RedaLabs\LaravelFilters\UtilitiesService;
 use App\Utilities\Filters\ProductCategoryNameFilter;
 
@@ -256,7 +259,7 @@ class DashboardUtilitiesService extends UtilitiesService
         ];
     }
 }
-````
+```
 
 🔒 **Important:**
 📌 Make sure your filter class implements the `Filter` interface and its `apply()` method.
@@ -267,12 +270,14 @@ class DashboardUtilitiesService extends UtilitiesService
 Define available sorts inside the `sorts()` method of your service class. Each sort is a `key-value` pair where:
 
 * The **key** represents the sort name.
-* The **value** is either the **method name** to return the sort, or the value itself will be used as the **column name
-  ** or **alias**.
+* The value is either:
+    * The name of a `method` that returns a `BaseSort` instance.
+    * A string representing a `column name` or `alias`, which will be used directly for sorting
 
 ```php
 use RedaLabs\LaravelFilters\UtilitiesService;
 use RedaLabs\LaravelFilters\Sorts\Concretes\RawSort;
+use RedaLabs\LaravelFilters\Sorts\Contracts\BaseSort;
 
 class OrderUtilitiesService extends UtilitiesService
 {
@@ -284,24 +289,26 @@ class OrderUtilitiesService extends UtilitiesService
         ];
     }
 
-    public function customNameSort(string $direction): BasicSort
+    public function customNameSort(string $direction): BaseSort
     {
-        return new RawSort("products.name {$direction}");
+        return new RawSort('LENGTH(products.name)', $direction);
     }
 }
 ```
 
 🔒 **Note:**
-Sort parameters are expected in the following format:
+Sorts query parameters are expected in the following format:
 
 ```
 /products?sorts[0][field]=name&sorts[1][field]=created_at&sorts[1][direction]=desc
 ```
 
-* The `direction` key is optional (asc is default).
+* The `direction` key is optional (`ASC` is default).
 * The sorts key can be customized by overriding the `$sortsKey` property:
 
 ```php
+use RedaLabs\LaravelFilters\UtilitiesService;
+
 class MyUtilitiesService extends UtilitiesService
 {
     protected string $sortsKey = 'your_custom_sort_key';
@@ -315,9 +322,11 @@ class MyUtilitiesService extends UtilitiesService
 
 # Using the Utilities Service
 
-Inject and use it in your controller:
+**Inject the service into your controller and apply filters and sorts:**
 
 ```php
+use App\Utilities\ProductUtilitiesService;
+
 class ProductController extends Controller
 {
     public function index(Request $request, ProductUtilitiesService $utilitiesService)
@@ -327,7 +336,7 @@ class ProductController extends Controller
             ->applySorts()
             ->getCriteria();
 
-        // Pass criteria to repository or query builder
+        // Use the criteria in your repository or query builder
     }
 }
 ```
@@ -336,9 +345,11 @@ class ProductController extends Controller
 
 # Building the Query
 
-Use the `Criteria` object to apply on Builder
+**Utilize the `Criteria` object to modify the`builder` instance**
 
 ```php
+use RedaLabs\LaravelFilters\Criteria;
+
 class ProductRepository
 {
     public function getProducts(Criteria $criteria)
@@ -351,7 +362,7 @@ class ProductRepository
 }
 ```
 
-> ✅ You can use `applyOnBuilder()` anywhere you're building your query—not limited to repositories.
+> ✅ `applyOnBuilder()` can be used anywhere you're building queries—not just limited repositories.
 
 # Components
 
@@ -373,27 +384,25 @@ The `UtilitiesService` class serves as a foundation for building filterable and 
 
 #### `getCriteria(): Criteria`
 
-Returns the current Criteria instance.
-
-- Returns: The current Criteria instance
+- **Returns**: The current Criteria instance
 
 #### `fresh(): UtilitiesService`
 
-Creates a new Criteria instance and resets the service.
+Initializes a fresh `Criteria` instance and resets the internal state of the service.
 
-- Returns: The current service instance
+- **Returns**: The current service instance
 
 #### `applyFilters(): UtilitiesService`
 
 Applies all valid filters from the request to the Criteria instance.
 
-- Returns: The current service instance
+- **Returns**: The current service instance
 
 #### `applySorts(): UtilitiesService`
 
 Applies all valid sorts from the request to the Criteria instance.
 
-- Returns: The current service instance
+- **Returns**: The current service instance
 
 ### Protected Methods to Override
 
@@ -401,15 +410,17 @@ Applies all valid sorts from the request to the Criteria instance.
 
 Define the available filters for your service.
 
-- Returns: An array of filter keys and their corresponding filter classes or method names
+- **Returns**: An associative array where each `key` is the filter name, and the `value` is either a `filter instance`
+  or the name of a `method name` that implements the filter.
 
 ```php
+use App\Utilities\Filters\ProductCategoryNameFilter;
+
 protected function filters(): array
 {
     return [
-        'status' => StatusFilter::class,
+        'category_name' => new ProductCategoryNameFilter(),
         'date_range' => 'applyDateRangeFilter',
-        'search' => SearchFilter::class
     ];
 }
 ```
@@ -418,7 +429,9 @@ protected function filters(): array
 
 Define the available sorts for your service.
 
-- Returns: An array of sort keys and their corresponding field names or method names
+- **Returns**: An associative array where each key is the sort name used in requests, and the value is either:
+    - `field/column` name to sort by directly.
+    - `method name` that returns a BaseSort instance for custom logic.
 
 ```php
 protected function sorts(): array
@@ -439,21 +452,18 @@ protected function sorts(): array
 use RedaLabs\LaravelFilters\UtilitiesService;
 use RedaLabs\LaravelFilters\Criteria;
 use Illuminate\Http\Request;
+use App\Utilities\Filters\{StatusFilter, RoleFilter};
+use RedaLabs\LaravelFilters\Filters\Conditions\Concretes\Condition;
 
 class UserService extends UtilitiesService
 {
-    protected string $defaultSortDirection = 'desc';
-
-    public function __construct(Criteria $criteria, Request $request)
-    {
-        parent::__construct($criteria, $request);
-    }
+    protected string $defaultSortDirection = 'DESC';
 
     protected function filters(): array
     {
         return [
-            'status' => StatusFilter::class,
-            'role' => RoleFilter::class,
+            'status' => new StatusFilter(),
+            'role' => new RoleFilter(),
             'search' => 'applySearchFilter'
         ];
     }
@@ -480,25 +490,30 @@ class UserService extends UtilitiesService
 use RedaLabs\LaravelFilters\UtilitiesService;
 use RedaLabs\LaravelFilters\Criteria;
 use Illuminate\Http\Request;
+use App\Utilities\Filters\{
+    StatusFilter,
+    CategoryFilter,
+    TagsFilter};
+use RedaLabs\LaravelFilters\Filters\Joins\Concretes\Join;
+use RedaLabs\LaravelFilters\Filters\Conditions\Concretes\{
+    Condition,
+    BetweenCondition
+};
+use RedaLabs\LaravelFilters\Filters\Sorts\Concretes\RawSort;
 
 class PostService extends UtilitiesService
 {
-    protected string $defaultSortDirection = 'desc';
+    protected string $defaultSortDirection = 'DESC';
     protected string $sortsKey = 'order_by'; // Customize the sort parameter key
-
-    public function __construct(Criteria $criteria, Request $request)
-    {
-        parent::__construct($criteria, $request);
-    }
 
     protected function filters(): array
     {
         return [
-            'status' => StatusFilter::class,
-            'category' => CategoryFilter::class,
+            'status' => new StatusFilter,
+            'category' => new CategoryFilter,
             'date_range' => 'applyDateRangeFilter',
             'author' => 'applyAuthorFilter',
-            'tags' => TagsFilter::class
+            'tags' => new TagsFilter
         ];
     }
 
@@ -528,12 +543,15 @@ class PostService extends UtilitiesService
 
     protected function applyViewsSort(string $direction): BaseSort
     {
-        return new RawSort('views_count + likes_count DESC');
+        return new RawSort('views_count + likes_count', $direction);
     }
 
     protected function applyPopularitySort(string $direction): BaseSort
     {
-        return new RawSort('(views_count * 0.7) + (likes_count * 0.3) DESC');
+        return new RawSort('(views_count * ?) + (likes_count * ?)', $direction, [
+            0.5, // Weight for views
+            1.5  // Weight for likes
+        ]););
     }
 }
 ```
@@ -544,6 +562,8 @@ class PostService extends UtilitiesService
 - Always validate filter and sort parameters to ensure data integrity.
 - Be mindful of security risks when handling user-provided input.
 - Keep filtering and sorting logic clean, focused, and limited to a single responsibility.
+
+---
 
 ## Criteria
 
@@ -561,44 +581,48 @@ The Criteria class serves as a container and manager for all query modifications
 
 ### Available Methods
 
-#### `appendJoin(BaseJoin $join, int $sort = 100): self`
+#### `appendJoin(BaseJoin $join, int $sort = 100): Criteria`
 
 Adds a join to the criteria with an optional sort order.
 
 - `$join`: The join instance to add
 - `$sort`: The order in which the join should be applied (lower numbers are applied first). Defaults to 100
+- **Returns:** same `Criteria` instance
 
-#### `appendSort(BaseSort $sort): self`
+#### `appendSort(BaseSort $sort): Criteria`
 
 Adds a sort to the criteria.
 
 - `$sort`: The sort instance to add
+- **Returns:** same `Criteria` instance
 
-#### `removeJoinIfExists(string $joinName): self`
+#### `removeJoinIfExists(string $joinName): Criteria`
 
 Removes a join from the criteria if it exists.
 
 - `$joinName`: The name of the join to remove
+- **Returns:** same `Criteria` instance
 
 #### `joinExists(string $joinName): bool`
 
 Checks if a join exists in the criteria.
 
 - `$joinName`: The name of the join to check
-- Returns: `true` if the join exists, `false` otherwise
+- **Returns:** `true` if the join exists, `false` otherwise
 
-#### `appendCondition(BaseCondition $condition): self`
+#### `appendCondition(BaseCondition $condition): Criteria`
 
 Adds a condition to the criteria.
 
 - `$condition`: The condition instance to add
+- **Returns:** same `Criteria` instance
 
 #### `applyOnBuilder(Builder $builder): Builder`
 
 Applies all joins, conditions, and sorts to the query builder in the correct order.
 
 - `$builder`: The query builder instance to modify
-- Returns: The modified query builder
+- **Returns:** The modified query builder
 
 ### Example
 
@@ -632,8 +656,8 @@ $groupConditions = new GroupConditions([
 $criteria->appendCondition($groupConditions);
 
 // Add multiple sorts
-$criteria->appendSort(new Sort('created_at', 'desc'));
-$criteria->appendSort(new Sort('views', 'desc'));
+$criteria->appendSort(new Sort('created_at', 'DESC'));
+$criteria->appendSort(new Sort('views', 'DESC'));
 
 // Apply to a query builder
 $query = DB::table('posts');
@@ -650,6 +674,8 @@ $query = $criteria->applyOnBuilder($query);
 // ORDER BY created_at DESC, views DESC
 ```
 
+---
+
 ## Conditions
 
 - [Basic Conditions](#basic-conditions)
@@ -663,15 +689,15 @@ $query = $criteria->applyOnBuilder($query);
 ### Condition
 
 **Purpose**: The fundamental building block for creating WHERE clauses in your queries. It handles basic comparison
-operations between a field and a value.
+operations between a `field` and a `value`.
 
 #### Parameters:
 
 - `string $field`: The database column name to apply the condition on
-- `string $operator`: The comparison operator (=,!=,<>,>,<,>=,<=,LIKE,NOT LIKE)
+- `string $operator`: The comparison operator (`=`, `!=`, `<>`, `>`, `<`, `>=`, `<=`, `LIKE`, `NOT LIKE`)
 - `mixed $value`: The value to compare against
-- `string $boolean`: The logical operator ('and' or 'or') to use when combining with other conditions. Defaults to '
-  and'.
+- `string $boolean`: The logical operator (`AND` or `OR`) to use when combining with other conditions. Defaults to
+  `AND`.
 
 **Example**:
 
@@ -694,15 +720,15 @@ $condition = new Condition('status', '=', 'active', 'or');
 
 ### ColumnCondition
 
-**Purpose**: Used when you need to compare two columns in the same table or across joined tables.
+**Purpose**: Used when you need to `compare two columns` in the same table or across joined tables.
 
 #### Parameters:
 
 - `string $field`: The database column name to apply the condition on
-- `string $operator`: The comparison operator (=,!=,<>,>,<,>=,<=,LIKE,NOT LIKE)
+- `string $operator`: The comparison operator (`=`, `!=`, `<>`, `>`, `<`, `>=`, `<=`, `LIKE`, `NOT LIKE`)
 - `mixed $value`: The value to compare against
-- `string $boolean`: The logical operator ('and' or 'or') to use when combining with other conditions. Defaults to '
-  and'.
+- `string $boolean`: The logical operator (`AND` or `OR`) to use when combining with other conditions. Defaults to
+  `AND`.
 
 **Example**:
 
@@ -724,9 +750,9 @@ $condition = new ColumnCondition('products.stock', '<', 'suppliers.min_stock', '
 
 - `string $field`: The database column name to apply the condition on
 - `mixed $value`: The value to compare against
-- `string $boolean`: The logical operator ('and' or 'or') to use when combining with other conditions. Defaults to '
-  and'.
-- `bool $not`: Indicates whether to negate the condition (true for NOT logic). Defaults to false
+- `string $boolean`: The logical operator (`AND` or `OR`) to use when combining with other conditions. Defaults to
+  `AND`.
+- `bool $not`: Indicates whether to negate the condition (`true` for NOT logic). Defaults to `false`
 
 **Purpose**: Checks if a JSON array contains a specific value. Useful for querying JSON columns that store arrays.
 
@@ -734,7 +760,7 @@ $condition = new ColumnCondition('products.stock', '<', 'suppliers.min_stock', '
 
 - `$field`: The database column name to apply the condition on
 - `$value`: The value to compare against
-- `$boolean`: The logical operator ('and' or 'or') to use when combining with other conditions. Defaults to 'and'.
+- `$boolean`: The logical operator (`AND` or `OR`) to use when combining with other conditions. Defaults to `AND`.
 
 **Example**:
 
@@ -746,6 +772,10 @@ $condition = new JsonContainCondition('tags', 'php');
 
 // Check if preferences->languages contains 'en'
 $condition = new JsonContainCondition('preferences->languages', 'en');
+
+// Exclude users whose roles contain 'admin'
+$condition = new JsonContainCondition('roles', 'admin', not: true);
+
 ```
 
 ### JsonContainsKeyCondition
@@ -756,20 +786,17 @@ data.
 #### Parameters:
 
 - `string $field`: The database column name to apply the condition on
-- `string $boolean`: The logical operator ('and' or 'or') to use when combining with other conditions. Defaults to '
-  and'.
-- `bool $not`: Indicates whether to negate the condition (true for NOT logic). Defaults to false
+- `string $boolean`: The logical operator (`AND` or `OR`) to use when combining with other conditions. Defaults to
+  `AND`.
+- `bool $not`: Indicates whether to negate the condition (`true` for NOT logic). Defaults to `false`
 
 **Example**:
 
 ```php
 use RedaLabs\LaravelFilters\Filters\Conditions\Concretes\JsonContainsKeyCondition;
 
-// Check if metadata has 'last_login' key
-$condition = new JsonContainsKeyCondition('metadata', 'last_login');
-
-// Check nested key
-$condition = new JsonContainsKeyCondition('preferences->notifications', 'email');
+// Check if preferences has 'notifications' key
+$condition = new JsonContainsKeyCondition('preferences->notifications');
 ```
 
 ### JsonLengthCondition
@@ -779,10 +806,10 @@ $condition = new JsonContainsKeyCondition('preferences->notifications', 'email')
 #### Parameters:
 
 - `string $field`: The database column name to apply the condition on
-- `string $operator`: The comparison operator (=,!=,<>,>,<,>=,<=,LIKE,NOT LIKE)
+- `string $operator`: The comparison operator (`=`, `!=`, `<>`, `>`, `<`, `>=`, `<=`,)
 - `mixed $value`: The value to compare against
-- `string $boolean`: The logical operator ('and' or 'or') to use when combining with other conditions. Defaults to '
-  and'.
+- `string $boolean`: The logical operator (`AND` or `OR`) to use when combining with other conditions. Defaults to
+  `AND`.
 
 **Example**:
 
@@ -794,6 +821,10 @@ $condition = new JsonLengthCondition('tags', '>', 2);
 
 // Check if preferences->languages has exactly 3 items
 $condition = new JsonLengthCondition('preferences->languages', '=', 3);
+
+// Exclude rows where 'settings' JSON object has an 'experimental' key
+$condition = new JsonContainsKeyCondition('settings->experimental', not: true);
+
 ```
 
 ### JsonOverlapCondition
@@ -805,9 +836,8 @@ elements.
 
 - `string $field`: The database column name to apply the condition on
 - `mixed $value`: The value to compare against
-- `string $boolean`: The logical operator ('and' or 'or') to use when combining with other conditions. Defaults to '
-  and'.
-- `bool $not`: Indicates whether to negate the condition (true for NOT logic). Defaults to false
+- `string $boolean`: The logical operator (`AND` or `OR`) to use when combining with other conditions. Defaults to `AND.
+- `bool $not`: Indicates whether to negate the condition (`true` for NOT logic). Defaults to `false`
 
 **Example**:
 
@@ -819,6 +849,10 @@ $condition = new JsonOverlapCondition('tags', ['php', 'laravel']);
 
 // Check if skills overlap with required skills
 $condition = new JsonOverlapCondition('skills', ['php', 'mysql', 'redis']);
+
+// Exclude rows where the roles array overlaps with ['admin', 'editor']
+$condition = new JsonOverlapCondition('roles', ['admin', 'editor'], not: true);
+
 ```
 
 ## Aggregation Conditions
@@ -831,10 +865,10 @@ data.
 #### Parameters:
 
 - `string $field`: The database column name to apply the condition on
-- `string $operator`: The comparison operator (=,!=,<>,>,<,>=,<=,LIKE,NOT LIKE)
+- `string $operator`: The comparison operator (`=`, `!=`, `<>`, `>`, `<`, `>=`, `<=`, `LIKE`, `NOT LIKE`)
 - `mixed $value`: The value to compare against
-- `string $boolean`: The logical operator ('and' or 'or') to use when combining with other conditions. Defaults to '
-  and'.
+- `string $boolean`: The logical operator (`AND` or `OR`) to use when combining with other conditions. Defaults to
+  `AND`.
 
 **Example**:
 
@@ -855,13 +889,14 @@ $condition = new AggregationCondition('AVG(rating)', '>', 4.5);
 
 ### GroupConditions
 
-**Purpose**: Groups multiple conditions together with a logical operator (AND/OR). Enables complex query composition.
+**Purpose**: Groups multiple conditions together with a logical operator (`AND`/`OR`). Enables complex query
+composition.
 
 #### Parameters:
 
 - `BaseCondition[] $conditions`: An array of condition instances to be grouped together.
-- `string $boolean`: The logical operator ('and' or 'or') to use when combining with other conditions. Defaults to '
-  and'.
+- `string $boolean`: The logical operator (`AND` or `OR`) to use when combining with other conditions. Defaults to
+  `AND`.
 
 **Example**:
 
@@ -882,12 +917,34 @@ $group = new GroupConditions([
     ], 'or'),
     new Condition('is_verified', '=', true)
 ], 'and');
+
+// Complex real-world example with deeper nesting
+$group = new GroupConditions([
+    new GroupConditions([
+        new Condition('country', '=', 'US'),
+        new GroupConditions([
+            new Condition('subscription_plan', '=', 'premium'),
+            new Condition('last_login', '>=', now()->subDays(30)),
+        ], 'or'),
+    ], 'and'),
+    new GroupConditions([
+        new Condition('email_verified', '=', true),
+        new Condition('phone_verified', '=', true, 'or')
+    ], 'and'),
+], 'and');
+
+// previous group will generate a query like this:
+where (
+        ("country" = 'US' or ("subscription_plan" = 'premium' and "last_login" >= '2025-01-01'))
+        and
+        ("email_verified" = 1 or "phone_verified" = 1)
+      );
 ```
 
 > **Note**
 >
-> The `GroupConditions` class does **not** support mixing different condition types. Specifically, you **cannot combine
-** `AggregationCondition` instances with standard (non-aggregation) `Condition` instances in the same group.
+> The `GroupConditions` class does **not** support **mixing** different condition types. Specifically, you cannot
+> combine `AggregationCondition` instances with standard (non-aggregation) `Condition` instances in the same group.
 >
 > If mixed condition types are provided, a `MixedGroupConditionException` will be thrown to enforce consistency and
 > prevent ambiguous behavior.
@@ -896,14 +953,15 @@ $group = new GroupConditions([
 
 ### BetweenCondition
 
-**Purpose**: Creates a BETWEEN clause for range queries. Useful for filtering values within a specific range.
+**Purpose**: Creates a `BETWEEN` clause for range queries. Useful for filtering values within a specific range.
 
 #### Parameters:
 
 - `string $field`: The database column name to apply the condition on
 - `array $values`: An array containing exactly two elements, representing the lower and upper bounds.
-- `string $boolean`: The logical operator ('and' or 'or') to use when combining with other conditions. Defaults to '
-  and'.
+- `string $boolean`: The logical operator (`AND` or `OR`) to use when combining with other conditions. Defaults to
+  `AND`.
+- `bool $not`: Indicates whether to negate the condition (`true` for NOT logic). Defaults to `false`.
 
 **Example**:
 
@@ -915,6 +973,9 @@ $condition = new BetweenCondition('price', [10,100]);
 
 // Filter users with age between 18 and 65
 $condition = new BetweenCondition('age', [18, 65]);
+
+// Exclude orders with total between 500 and 1000
+$condition = new BetweenCondition('total', [500, 1000], not: true);
 ```
 
 > **Note**
@@ -932,9 +993,9 @@ $condition = new BetweenCondition('age', [18, 65]);
 #### Parameters:
 
 - `string $field`: The database column name to apply the condition on
-- `string $operator`: The comparison operator (=,!=,<>,>,<,>=,<=,LIKE,NOT LIKE)
+- `string $operator`: The comparison operator (`=`, `!=`, `<>`, `>`, `<`, `>=`, `<=`, `LIKE`, `NOT LIKE`)
 - `mixed $value`: The value to compare against
-- `string $boolean`: The logical operator ('and' or 'or') to use when combining with other conditions. Defaults to '
+- `string $boolean`: The logical operator (`AND` or `OR`) to use when combining with other conditions. Defaults to '
   and'.
 
 **Example**:
@@ -957,9 +1018,9 @@ $condition = new DateCondition('created_at', '=', '2024-01-01');
 
 - `string $field`: The database column name to apply the condition on
 - `array $values`: The value to compare against
-- `string $boolean`: The logical operator ('and' or 'or') to use when combining with other conditions. Defaults to '
-  and'.
-- `bool $not`: Indicates whether to negate the condition (true for NOT logic). Defaults to false
+- `string $boolean`: The logical operator (`AND` or `OR`) to use when combining with other conditions. Defaults to
+  `AND`.
+- `bool $not`: Indicates whether to negate the condition (`true` for NOT logic). Defaults to `false`
 
 **Example**:
 
@@ -971,6 +1032,9 @@ $condition = new InCondition('status', ['active', 'pending']);
 
 // Filter products in specific categories
 $condition = new InCondition('category_id', [1, 2, 3]);
+
+// Exclude users with roles 'admin' or 'moderator'
+$condition = new InCondition('role', ['admin', 'moderator'], not: true);
 ```
 
 ### NullCondition
@@ -980,8 +1044,8 @@ $condition = new InCondition('category_id', [1, 2, 3]);
 #### Parameters:
 
 - `string $field`: The database column name to apply the condition on
-- `string $boolean`: The logical operator ('and' or 'or') to use when combining with other conditions
-- `bool $not`: Indicates whether to negate the condition (true for NOT logic). Defaults to false
+- `string $boolean`: The logical operator (`AND` or `OR`) to use when combining with other conditions
+- `bool $not`: Indicates whether to negate the condition (`true` for NOT logic). Defaults to `false`
 
 **Example**:
 
@@ -992,7 +1056,7 @@ use RedaLabs\LaravelFilters\Filters\Conditions\Concretes\NullCondition;
 $condition = new NullCondition('deleted_at');
 
 // Filter records where deleted_at is NOT NULL
-$condition = new NullCondition('deleted_at', 'and', true);
+$condition = new NullCondition('deleted_at', not: true);
 ```
 
 ### RawCondition
@@ -1004,8 +1068,8 @@ binding.
 
 - `string $expression`: The raw SQL expression to be used as a condition.
 - `array $bindings`: The values to bind to the placeholders within the raw SQL expression. Defaults to an empty array
-- `string $boolean`: The logical operator ('and' or 'or') to use when combining with other conditions. Defaults to '
-  and'.
+- `string $boolean`: The logical operator (`AND` or `OR`) to use when combining with other conditions. Defaults to
+  `AND`.
 
 **Example**:
 
@@ -1049,10 +1113,9 @@ $condition = new WhenCondition($featureEnabled, new Condition('feature_id', '=',
 2. **JSON Operations**: Ensure your database supports JSON operations before using JSON-related conditions.
 3. **Performance**: Consider the impact of complex conditions and nested groups on query performance.
 4. **Condition Organization**:
-
-- Group related conditions together
-- Use `GroupConditions` for complex logical combinations
-- Consider the order of conditions for optimal query performance
+    - Group related conditions together
+    - Use `GroupConditions` for complex logical combinations
+    - Consider the order of conditions for optimal query performance
 
 ---
 
@@ -1070,32 +1133,35 @@ to specify the join conditions and add additional conditions to the join clause.
 
 - `string $table`: The table to join with.
 - `array $first`: The first column in the join condition.
-- `string $operator`: The comparison operator (=,!=,<>,>,<,>=,<=,LIKE,NOT LIKE).
+- `string $operator`: The comparison operator (`=`, `!=`, `<>`, `>`, `<`, `>=`, `<=`, `LIKE`, `NOT LIKE`).
 - `string $second`: The second column in the join condition.
-- `string $type`: The type of join to perform (inner, left, right). Defaults to 'inner'.
+- `string $type`: The type of join to perform (`inner`, `left`, `right`). Defaults to `inner`.
 - `string|null $name`: Optional name for the join. If not provided, the table name is used.
 
 #### Available Methods
 
-`appendCondition(BaseCondition $condition): self`
+`appendCondition(BaseCondition $condition): Join`
 
 - Adds a condition to the join clause
 - Returns the join instance for method chaining
 
-   ```php
-   $join = (new Join('categories', 'products.category_id', '=', 'categories.id'))
-       ->appendCondition(new Condition('categories.is_active', '=', true))
-       ->appendCondition(new Condition('categories.type', '=', 'main'));
-   ```
+```php
+use RedaLabs\LaravelFilters\Filters\Joins\Concretes\Join;
+use RedaLabs\LaravelFilters\Filters\Conditions\Concretes\Condition;
 
-`apply(Builder $builder): void` // todo check if remove internal methods.
+$join = (new Join('categories', 'products.category_id', '=', 'categories.id'))
+   ->appendCondition(new Condition('categories.is_active', '=', true))
+   ->appendCondition(new Condition('categories.type', '=', 'main'));
+```
+
+`apply(Builder $builder): void`
 
 - Applies the join to the query builder
 - Internal method used by the package
 
-   ```php
-   $join->apply($queryBuilder);
-   ```
+```php
+ $join->apply($queryBuilder);
+```
 
 **Example**:
 
@@ -1141,14 +1207,16 @@ $join = (new Join('categories', 'products.category_id', '=', 'categories.id'))
 
 ### ClosureJoin
 
-**Purpose**: Creates a join using a closure, allowing for more complex join conditions and logic. Useful when you need
+**Purpose**: Creates a join using a closure, allowing for more complex join conditions and logic.
+
+Useful when you need
 to build dynamic or complex join conditions that can't be expressed with simple column comparisons.
 
 #### Parameters:
 
 - `string $table`: The table to join with
 - `Closure $closure`: A closure that receives the join query builder and defines the join conditions
-- `string $type`: The type of join (inner, left, right). Defaults to 'inner'
+- `string $type`: The type of join to perform (`inner`, `left`, `right`). Defaults to `inner`.
 - `string|null $name`: Optional name for the join. If not provided, the table name is used
 
 **Public Methods**:
@@ -1158,9 +1226,9 @@ to build dynamic or complex join conditions that can't be expressed with simple 
 - Applies the join to the query builder
 - Internal method used by the package
 
-   ```php
-   $join->apply($queryBuilder);
-   ```
+```php
+$join->apply($queryBuilder);
+```
 
 **Example**:
 
@@ -1227,6 +1295,8 @@ order = 100)` method. Joins with lower order values are executed first.
 Using named and ordered joins helps maintain predictable and maintainable query structures, particularly in complex
 filtering scenarios.
 
+---
+
 ## Sorts
 
 The Laravel Filters package provides two types of sorts to help you order your query results.
@@ -1239,7 +1309,7 @@ allowing you to sort by a specific column in ascending or descending order.
 #### Parameters:
 
 - `string $field`: The column name to sort by
-- `string $direction`: The sort direction ('asc' or 'desc'). Defaults to 'asc'.
+- `string $direction`: The sort direction (`ASC` or `DESC`). Defaults to `ASC`.
 
 **Available Methods**:
 
@@ -1247,9 +1317,10 @@ allowing you to sort by a specific column in ascending or descending order.
 
 - Applies the sort to the query builder
 - Internal method used by the package
-   ```php
-   $sort->apply($queryBuilder);
-   ```
+
+```php
+$sort->apply($queryBuilder);
+```
 
 **Example**:
 
@@ -1257,7 +1328,7 @@ allowing you to sort by a specific column in ascending or descending order.
 use RedaLabs\LaravelFilters\Sorts\Concretes\Sort;
 
 // Sort by name in ascending order
-$sort = new Sort('name', 'asc');
+$sort = new Sort('name', 'ASC');
 
 // Sort by created_at in descending order
 $sort = new Sort('created_at', 'desc');
@@ -1277,6 +1348,7 @@ expressions, functions, or complex sorting logic that can't be achieved with sim
 #### Parameters:
 
 - `string $expression`: The raw SQL expression for sorting
+- `string $direction`: The sort direction (`ASC` or `DESC`). Defaults to `ASC`.
 - `array $bindings`: Array of values to bind to the expression. Defaults to empty array
 
 **Available Methods**:
@@ -1285,9 +1357,10 @@ expressions, functions, or complex sorting logic that can't be achieved with sim
 
 - Applies the raw sort to the query builder
 - Internal method used by the package
-   ```php
-   $sort->apply($queryBuilder);
-   ```
+
+```php
+$sort->apply($queryBuilder);
+```
 
 **Example**:
 
@@ -1295,24 +1368,24 @@ expressions, functions, or complex sorting logic that can't be achieved with sim
 use RedaLabs\LaravelFilters\Sorts\Concretes\RawSort;
 
 // Sort by a calculated field
-$sort = new RawSort('(price * quantity) DESC');
+$sort = new RawSort('(price * quantity)', 'DESC');
 
 // Sort using a SQL function
-$sort = new RawSort('LENGTH(name) ASC');
+$sort = new RawSort('LENGTH(name)', 'ASC');
 
 // Sort with bindings
-$sort = new RawSort('FIELD(status, ?, ?, ?) ASC', ['active', 'pending', 'inactive']);
+$sort = new RawSort('FIELD(status, ?, ?, ?)', 'ASC', ['active', 'pending', 'inactive']);
 
-// Complex sorting with multiple conditions
+// Complex sorting with bindings
 $sort = new RawSort('
     CASE 
         WHEN status = ? THEN 1
         WHEN status = ? THEN 2
         ELSE 3
-    END ASC,
-    created_at DESC
-', ['active', 'pending']);
+    END', 'ASC', ['active', 'pending']);
 ```
+
+> 🔒**Important**:  Always use parameter binding with `RawSort`
 
 ## Best Practices for Sorts
 
@@ -1321,14 +1394,6 @@ $sort = new RawSort('
 - Custom SQL expressions
 - Database functions in sorting
 - Complex conditional sorting
-- Multiple column sorting with custom logic
-- 🔒 Always use parameter binding with `RawSort`
-
-**Multiple Sorts**:
-
-- Order sorts by priority
-- Consider the impact of each sort on performance
-- Use appropriate indexes for multiple column sorts
 
 ---
 

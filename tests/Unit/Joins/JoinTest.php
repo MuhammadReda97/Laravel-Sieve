@@ -73,9 +73,8 @@ class JoinTest extends TestCase
 
     public function test_join_accept_only_valid_types()
     {
-        $validTypes = JoinTypeEnum::values();
         try {
-            foreach ($validTypes as $type) {
+            foreach (JoinTypeEnum::values() as $type) {
                 new Join('posts', 'users.id', '=', 'posts.user_id', type: $type);
             }
             $this->assertTrue(true);

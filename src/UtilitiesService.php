@@ -62,11 +62,11 @@ abstract class UtilitiesService
     }
 
     /**
-     * Creates a new Criteria instance and resets the service.
+     * Initializes a fresh Criteria instance and resets the internal state.
      *
      * @return $this
      */
-    public function fresh(): self
+    public function fresh(): UtilitiesService
     {
         $this->criteria = new Criteria;
         return $this;
@@ -141,7 +141,7 @@ abstract class UtilitiesService
      *
      * @return $this
      */
-    final public function applySorts(): self
+    final public function applySorts(): UtilitiesService
     {
         if (!$this->hasValidSorts()) {
             return $this;
