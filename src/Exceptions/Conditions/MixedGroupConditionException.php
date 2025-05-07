@@ -2,9 +2,9 @@
 
 namespace RedaLabs\LaravelFilters\Exceptions\Conditions;
 
-use Exception;
+use RuntimeException;
 
-class MixedGroupConditionException extends Exception
+class MixedGroupConditionException extends RuntimeException
 {
     public function __construct()
     {

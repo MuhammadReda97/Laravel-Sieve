@@ -6,15 +6,16 @@ use Illuminate\Database\Connection;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Database\Query\Grammars\Grammar;
 use Illuminate\Database\Query\Processors\Processor;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase as BaseTestCase;
 
 class TestCase extends BaseTestCase
 {
-    protected $requiresBuilder = true;
+    protected bool $requiresBuilder = true;
 
     protected Builder $builder;
 
-    protected $mockedBuilder;
+    protected MockObject $mockedBuilder;
 
     protected function setUp(): void
     {

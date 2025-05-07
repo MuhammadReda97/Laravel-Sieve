@@ -39,7 +39,7 @@ class Criteria
     public function appendSort(BaseSort $sort): self
     {
         if ($sort instanceof Sort) {
-            $this->sorts[$sort->field] = $sort;
+            $this->sorts[$sort->getField()] = $sort;
             return $this;
         }
         $this->sorts[] = $sort;

@@ -8,8 +8,7 @@ use RedaLabs\LaravelFilters\Exceptions\Joins\InvalidJoinTypeException;
 
 class InvalidJoinTypeExceptionTest extends TestCase
 {
-
-    public function test_test_it_creates_exception_with_correct_message(): void
+    public function test_it_creates_exception_with_correct_message(): void
     {
         $invalidType = 'invalid';
         $expectedMessage = "Invalid join type: '{$invalidType}'. Valid types are: " . implode(', ', JoinTypeEnum::values());

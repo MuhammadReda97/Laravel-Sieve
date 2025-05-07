@@ -61,13 +61,16 @@ class CriteriaTest extends TestCase
 
     public function test_append_condition()
     {
-        $condition = new Condition('column', '=', 'value');
+        $condition1 = new Condition('column1', '=', 'value1');
+        $condition2 = new Condition('column2', '=', 'value2');
 
-        $this->criteria->appendCondition($condition);
+        $this->criteria->appendCondition($condition1);
+        $this->criteria->appendCondition($condition2);
 
         $conditions = $this->getPrivateProperty($this->criteria, 'conditions');
-        $this->assertCount(1, $conditions);
-        $this->assertSame($condition, $conditions[0]);
+        $this->assertCount(2, $conditions);
+        $this->assertSame($condition1, $conditions[0]);
+        $this->assertSame($condition2, $conditions[1]);
     }
 
     public function test_append_sort()

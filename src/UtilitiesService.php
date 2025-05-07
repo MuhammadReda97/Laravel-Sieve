@@ -65,7 +65,6 @@ abstract class UtilitiesService
             $this->applyFilter($filterKey, $filter);
         }
         return $this;
-
     }
 
     final public function applySorts(): self
