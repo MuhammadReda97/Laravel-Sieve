@@ -24,22 +24,6 @@ class Sort implements BaseSort
     }
 
     /**
-     * @return string
-     */
-    public function getField(): string
-    {
-        return $this->field;
-    }
-
-    /**
-     * @return string
-     */
-    public function getDirection(): string
-    {
-        return $this->direction;
-    }
-
-    /**
      * @param string $direction
      * @return void
      */
@@ -58,5 +42,21 @@ class Sort implements BaseSort
     public function apply(Builder $builder): void
     {
         $builder->orderBy($this->getField(), $this->getDirection());
+    }
+
+    /**
+     * @return string
+     */
+    public function getField(): string
+    {
+        return $this->field;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDirection(): string
+    {
+        return $this->direction;
     }
 }

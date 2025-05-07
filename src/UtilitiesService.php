@@ -27,22 +27,6 @@ abstract class UtilitiesService
     }
 
     /**
-     * @return Filter[] | string[]
-     */
-    protected function filters(): array
-    {
-        return [];
-    }
-
-    /**
-     * @return string[]
-     */
-    protected function sorts(): array
-    {
-        return [];
-    }
-
-    /**
      * @return Criteria
      */
     public function getCriteria(): Criteria
@@ -67,25 +51,6 @@ abstract class UtilitiesService
         return $this;
     }
 
-    final public function applySorts(): self
-    {
-        if (!$this->hasValidSorts()) {
-            return $this;
-        }
-        foreach ($this->getValidSortParameters() as $sort) {
-            $this->applySort($sort);
-        }
-        return $this;
-    }
-
-    private function availableSorts(): array
-    {
-        if (isset($this->availableSorts)) {
-            return $this->availableSorts;
-        }
-        return $this->availableSorts = $this->sorts();
-    }
-
     private function getApplicableFilters(): array
     {
         return array_filter(
@@ -93,6 +58,14 @@ abstract class UtilitiesService
             fn($filterKey) => $this->hasFilterValue($filterKey),
             ARRAY_FILTER_USE_KEY
         );
+    }
+
+    /**
+     * @return Filter[] | string[]
+     */
+    protected function filters(): array
+    {
+        return [];
     }
 
     private function hasFilterValue(string $filterKey): bool
@@ -112,9 +85,36 @@ abstract class UtilitiesService
         }
     }
 
+    final public function applySorts(): self
+    {
+        if (!$this->hasValidSorts()) {
+            return $this;
+        }
+        foreach ($this->getValidSortParameters() as $sort) {
+            $this->applySort($sort);
+        }
+        return $this;
+    }
+
     private function hasValidSorts(): bool
     {
         return !empty($this->queryParameters[$this->sortsKey] ?? []) && !empty($this->availableSorts());
+    }
+
+    private function availableSorts(): array
+    {
+        if (isset($this->availableSorts)) {
+            return $this->availableSorts;
+        }
+        return $this->availableSorts = $this->sorts();
+    }
+
+    /**
+     * @return string[]
+     */
+    protected function sorts(): array
+    {
+        return [];
     }
 
     private function getValidSortParameters(): array

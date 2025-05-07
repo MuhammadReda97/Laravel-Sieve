@@ -82,16 +82,13 @@ class Criteria
 
     /**
      * @param Builder $builder
-     * @return self
+     * @return $this
      */
-    public function applyJoins(Builder $builder): self
+    public function applySorts(Builder $builder): self
     {
-        array_multisort(array_column($this->joins, $this->joinOrderKey), SORT_ASC, $this->joins);
-        foreach ($this->joins as $joinName => $join) {
-            $join = $join[$joinName];
-            $join->apply($builder);
+        foreach ($this->sorts as $sort) {
+            $sort->apply($builder);
         }
-
         return $this;
     }
 
@@ -109,11 +106,18 @@ class Criteria
         return $this;
     }
 
-    public function applySorts(Builder $builder): self
+    /**
+     * @param Builder $builder
+     * @return self
+     */
+    public function applyJoins(Builder $builder): self
     {
-        foreach ($this->sorts as $sort) {
-            $sort->apply($builder);
+        array_multisort(array_column($this->joins, $this->joinOrderKey), SORT_ASC, $this->joins);
+        foreach ($this->joins as $joinName => $join) {
+            $join = $join[$joinName];
+            $join->apply($builder);
         }
+
         return $this;
     }
 }

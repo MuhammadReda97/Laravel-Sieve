@@ -2,6 +2,7 @@
 
 namespace RedaLabs\LaravelFilters\Filters\Conditions\Concretes;
 
+use Exception;
 use Illuminate\Contracts\Database\Query\Builder;
 use RedaLabs\LaravelFilters\Enums\Conditions\GroupConditionTypeEnum;
 use RedaLabs\LaravelFilters\Exceptions\Conditions\EmptyGroupConditionsException;
@@ -15,7 +16,7 @@ class GroupConditions extends BaseCondition
     /**
      * @param BaseCondition[] $conditions
      * @param string $boolean
-     * @throws \Exception
+     * @throws Exception
      */
     public function __construct(public readonly array $conditions, string $boolean = 'and')
     {
@@ -29,7 +30,7 @@ class GroupConditions extends BaseCondition
     /**
      * @param array $conditions
      * @return void
-     * @throws \Exception
+     * @throws Exception
      */
     private function validateConditions(array $conditions): void
     {

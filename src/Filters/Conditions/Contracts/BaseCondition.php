@@ -13,12 +13,12 @@ abstract class BaseCondition
         $this->validateBoolean($boolean);
     }
 
-    public abstract function apply(Builder $builder): void;
-
     private function validateBoolean(string $boolean): void
     {
         if (!in_array($boolean, LogicalOperatorEnum::values())) {
             throw new InvalidLogicalOperatorException($boolean);
         }
     }
+
+    public abstract function apply(Builder $builder): void;
 }

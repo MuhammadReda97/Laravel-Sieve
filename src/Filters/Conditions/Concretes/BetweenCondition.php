@@ -3,6 +3,7 @@
 namespace RedaLabs\LaravelFilters\Filters\Conditions\Concretes;
 
 use Illuminate\Contracts\Database\Query\Builder;
+use InvalidArgumentException;
 use RedaLabs\LaravelFilters\Filters\Conditions\Contracts\BaseCondition;
 
 class BetweenCondition extends BaseCondition
@@ -16,7 +17,7 @@ class BetweenCondition extends BaseCondition
     public function __construct(public readonly string $field, public readonly array $values, string $boolean = 'and', public readonly bool $not = false)
     {
         if (count($values) !== 2) {
-            throw new \InvalidArgumentException('Between condition requires exactly two values.');
+            throw new InvalidArgumentException('Between condition requires exactly two values.');
         }
 
         parent::__construct($boolean);
