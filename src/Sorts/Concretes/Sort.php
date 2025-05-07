@@ -7,14 +7,21 @@ use RedaLabs\LaravelFilters\Enums\Sorts\SortDirectionEnum;
 use RedaLabs\LaravelFilters\Exceptions\Sorts\InvalidSortDirectionException;
 use RedaLabs\LaravelFilters\Sorts\Contracts\BaseSort;
 
+/**
+ * Represents a sort operation on a database query.
+ * This class handles the sorting of query results by a specific field in a specified direction.
+ */
 class Sort implements BaseSort
 {
     private string $field;
     private string $direction;
 
     /**
-     * @param string $field
-     * @param string $direction
+     * Creates a new Sort instance.
+     *
+     * @param string $field The database column to sort by
+     * @param string $direction The sort direction ('ASC' or 'DESC')
+     * @throws InvalidSortDirectionException If the direction is not valid
      */
     public function __construct(string $field, string $direction)
     {
@@ -24,8 +31,10 @@ class Sort implements BaseSort
     }
 
     /**
-     * @param string $direction
-     * @return void
+     * Validates that the sort direction is one of the allowed values.
+     *
+     * @param string $direction The direction to validate
+     * @throws InvalidSortDirectionException If the direction is not valid
      */
     private function validateDirection(string $direction): void
     {
@@ -35,9 +44,9 @@ class Sort implements BaseSort
     }
 
     /**
-     * Apply the sort to the given query builder.
-     * @param Builder $builder
-     * @return void
+     * Applies the sort operation to the given query builder.
+     *
+     * @param Builder $builder The query builder to apply the sort to
      */
     public function apply(Builder $builder): void
     {
@@ -45,7 +54,9 @@ class Sort implements BaseSort
     }
 
     /**
-     * @return string
+     * Gets the field (column) being sorted by.
+     *
+     * @return string The field name
      */
     public function getField(): string
     {
@@ -53,7 +64,9 @@ class Sort implements BaseSort
     }
 
     /**
-     * @return string
+     * Gets the sort direction.
+     *
+     * @return string The sort direction ('ASC' or 'DESC')
      */
     public function getDirection(): string
     {

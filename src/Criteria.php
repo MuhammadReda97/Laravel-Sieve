@@ -8,25 +8,39 @@ use RedaLabs\LaravelFilters\Filters\Joins\Contracts\BaseJoin;
 use RedaLabs\LaravelFilters\Sorts\Concretes\Sort;
 use RedaLabs\LaravelFilters\Sorts\Contracts\BaseSort;
 
+/**
+ * Main orchestrator class for managing and applying query modifications.
+ * This class handles the collection and application of joins, conditions, and sorts to a query builder.
+ */
 class Criteria
 {
     /**
-     * @var BaseCondition[]
+     * @var BaseCondition[] Array of conditions to be applied to the query
      */
     private array $conditions = [];
 
     /**
-     * @var BaseJoin[]
+     * @var BaseJoin[] Array of joins to be applied to the query
      */
     private array $joins = [];
 
     /**
-     * @var Sort[]
+     * @var Sort[] Array of sorts to be applied to the query
      */
     private array $sorts = [];
 
+    /**
+     * @var string Key used for sorting joins by their order
+     */
     private string $joinOrderKey = 'order';
 
+    /**
+     * Adds a join to the criteria with an optional sort order.
+     *
+     * @param BaseJoin $join The join to be added
+     * @param int $sort The order in which the join should be applied (default: 100)
+     * @return $this
+     */
     public function appendJoin(BaseJoin $join, int $sort = 100): self
     {
         $this->joins[$join->name] = [
@@ -36,6 +50,12 @@ class Criteria
         return $this;
     }
 
+    /**
+     * Adds a sort to the criteria.
+     *
+     * @param BaseSort $sort The sort to be added
+     * @return $this
+     */
     public function appendSort(BaseSort $sort): self
     {
         if ($sort instanceof Sort) {
@@ -46,6 +66,12 @@ class Criteria
         return $this;
     }
 
+    /**
+     * Removes a join from the criteria if it exists.
+     *
+     * @param string $joinName The name of the join to remove
+     * @return $this
+     */
     public function removeJoinIfExists(string $joinName): self
     {
         if (isset($this->joins[$joinName])) {
@@ -55,21 +81,34 @@ class Criteria
         return $this;
     }
 
+    /**
+     * Checks if a join exists in the criteria.
+     *
+     * @param string $joinName The name of the join to check
+     * @return bool True if the join exists, false otherwise
+     */
     public function isJoinExists(string $joinName): bool
     {
         return isset($this->joins[$joinName]);
     }
 
+    /**
+     * Adds a condition to the criteria.
+     *
+     * @param BaseCondition $condition The condition to be added
+     * @return $this
+     */
     public function appendCondition(BaseCondition $condition): self
     {
         $this->conditions[] = $condition;
         return $this;
     }
 
-
     /**
-     * @param Builder $builder
-     * @return Builder
+     * Applies all modifications (joins, conditions, and sorts) to the query builder.
+     *
+     * @param Builder $builder The query builder to modify
+     * @return Builder The modified query builder
      */
     public function applyOnBuilder(Builder $builder): Builder
     {
@@ -81,7 +120,9 @@ class Criteria
     }
 
     /**
-     * @param Builder $builder
+     * Applies all sorts to the query builder.
+     *
+     * @param Builder $builder The query builder to modify
      * @return $this
      */
     public function applySorts(Builder $builder): self
@@ -93,9 +134,11 @@ class Criteria
     }
 
     /**
-     * @param BaseCondition[] $conditions
-     * @param Builder $builder
-     * @return self
+     * Applies all conditions to the query builder.
+     *
+     * @param Builder $builder The query builder to modify
+     * @param BaseCondition[] $conditions Array of conditions to apply
+     * @return $this
      */
     public function applyConditions(Builder $builder, array $conditions): self
     {
@@ -107,8 +150,10 @@ class Criteria
     }
 
     /**
-     * @param Builder $builder
-     * @return self
+     * Applies all joins to the query builder in their specified order.
+     *
+     * @param Builder $builder The query builder to modify
+     * @return $this
      */
     public function applyJoins(Builder $builder): self
     {
