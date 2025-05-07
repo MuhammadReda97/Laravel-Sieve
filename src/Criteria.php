@@ -87,7 +87,7 @@ class Criteria
      * @param string $joinName The name of the join to check
      * @return bool True if the join exists, false otherwise
      */
-    public function isJoinExists(string $joinName): bool
+    public function joinExists(string $joinName): bool
     {
         return isset($this->joins[$joinName]);
     }

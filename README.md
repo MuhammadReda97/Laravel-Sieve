@@ -71,13 +71,17 @@ class MyUtilitiesService extends UtilitiesService
 
 ## Defining Filters
 
-Define filters inside the `filters()` method of your service class. Each filter is a `key-value` pair where:
+Define available filters inside the `filters()` method of your service class. Each filter is a `key-value` pair where:
 
-* The **key** represents the query parameter.
-* The **value** is either the method name to handle the filter or a `Filter` instance.
+* The **key** represents the query parameter name.
+* The **value** is either a method name to handle the filter implementation or a `Filter` instance.
 
 ```php
-class MyUtilitiesService extends UtilitiesService
+use RedaLabs\LaravelFilters\UtilitiesService;
+use RedaLabs\LaravelFilters\Criteria;
+use RedaLabs\LaravelFilters\Filters\Conditions\Concretes\Condition;
+
+class ProductUtilitiesService extends UtilitiesService
 {
     public function filters(): array
     {
@@ -86,7 +90,7 @@ class MyUtilitiesService extends UtilitiesService
         ];
     }
 
-    public function productNameFilter(Criteria $criteria, mixed $value)
+    public function productNameFilter(Criteria $criteria, mixed $value): void
     {
         $criteria->appendCondition(new Condition('products.name', 'like', "%$value%"));
     }
@@ -104,13 +108,16 @@ Each filter method receives two arguments:
 🔒 **Tip:**
 Always validate filter values using Form Requests, or another approach you prefer.
 
-📘 [Explore Available Conditions →](#Conditions) // todo check if could be removed to end of section.
+📘 [**Explore Available Conditions →**](#Conditions)
 
 ### Applying Joins in Filters
 
 Need to use Join's in filters? No problem — just append them inside your filter method:
 
 ```php
+use RedaLabs\LaravelFilters\Filters\Joins\Concretes\Join;
+use RedaLabs\LaravelFilters\Filters\Conditions\Concretes\Condition;
+
 $criteria->appendJoin(
     new Join('product_categories', 'categories.id = products.category_id')
 );
@@ -123,6 +130,9 @@ $criteria->appendCondition(
 You can even attach conditions directly to the join:
 
 ```php
+use RedaLabs\LaravelFilters\Filters\Joins\Concretes\Join;
+use RedaLabs\LaravelFilters\Filters\Conditions\Concretes\Condition;
+
 $criteria->appendJoin(
     (new Join('product_categories', 'categories.id = products.category_id'))
         ->appendCondition(new Condition('product_categories.is_active', '=', 1))
@@ -134,7 +144,9 @@ $criteria->appendJoin(
 already exists:
 
 ```php
-if (!$criteria->isJoinExists('product_categories')) {
+use RedaLabs\LaravelFilters\Filters\Joins\Concretes\Join;
+
+if (!$criteria->joinExists('product_categories')) {
     $criteria->appendJoin(new Join('product_categories', 'categories.id = products.category_id'));
 }
 ```
@@ -145,6 +157,11 @@ Appending a join with an existing name will overwrite the previous one.
 #### Example with Multiple Filters Using Joins
 
 ```php
+use RedaLabs\LaravelFilters\Filters\Joins\Concretes\Join;
+use RedaLabs\LaravelFilters\Filters\Conditions\Concretes\{Condition, AggregationCondition};
+use RedaLabs\LaravelFilters\UtilitiesService;
+use RedaLabs\LaravelFilters\Criteria;
+
 class MyUtilitiesService extends UtilitiesService
 {
     public function filters(): array
@@ -157,7 +174,7 @@ class MyUtilitiesService extends UtilitiesService
 
     public function categoryNameFilter(Criteria $criteria, mixed $value)
     {
-        if (!$criteria->isJoinExists('product_categories')) {
+        if (!$criteria->joinExists('product_categories')) {
             $criteria->appendJoin(new Join('product_categories', 'categories.id = products.category_id'));
         }
 
@@ -168,7 +185,7 @@ class MyUtilitiesService extends UtilitiesService
     {
         if (!$value) return;
 
-        if (!$criteria->isJoinExists('product_categories')) {
+        if (!$criteria->joinExists('product_categories')) {
             $criteria->appendJoin(new Join('product_categories', 'categories.id = products.category_id'));
         }
 
@@ -177,7 +194,7 @@ class MyUtilitiesService extends UtilitiesService
 }
 ```
 
-📘 [Explore Available Joins →](#joins)
+📘 [**Explore Available Joins →**](#joins)
 
 ---
 
@@ -186,21 +203,32 @@ class MyUtilitiesService extends UtilitiesService
 You can reuse common filters across services by implementing the `Filter` interface:
 
 ````php
+namespace App\Utilities\Filters;
+
+use RedaLabs\LaravelFilters\Filters\Contracts\Filter;
+use RedaLabs\LaravelFilters\Criteria;
+use RedaLabs\LaravelFilters\Filters\Joins\Concretes\Join;
+use RedaLabs\LaravelFilters\Filters\Conditions\Concretes\Condition;
+
 class ProductCategoryNameFilter implements Filter
 {
     public function apply(Criteria $criteria, mixed $value)
     {
-        if (!$criteria->isJoinExists('product_categories')) {
+        if (!$criteria->joinExists('product_categories')) {
             $criteria->appendJoin(new Join('product_categories', 'categories.id = products.category_id'));
         }
         $criteria->appendCondition(new Condition('product_categories.name', 'like', "%$value%"));
     }
 ````
 
-Use the filter class like this:
+To apply a reusable filter class in your service, simply register it in the `filters()` method:
+
 
 ```php
-class MyUtilitiesService extends UtilitiesService
+use RedaLabs\LaravelFilters\UtilitiesService;
+use App\Utilities\Filters\ProductCategoryNameFilter;
+
+class ProductUtilitiesService extends UtilitiesService
 {
     public function filters(): array
     {
@@ -210,10 +238,15 @@ class MyUtilitiesService extends UtilitiesService
     }
 }
 ```
+📌 **Note:** If you need to reuse the same filter logic but apply it to `different columns`, consider modifying the filter class to accept a column name and use it dynamically in the `apply()` method.
+
 
 You can reuse it in other services too:
 
 ````php
+use RedaLabs\LaravelFilters\UtilitiesService;
+use App\Utilities\Filters\ProductCategoryNameFilter;
+
 class DashboardUtilitiesService extends UtilitiesService
 {
     public function filters(): array
@@ -235,22 +268,25 @@ Define available sorts inside the `sorts()` method of your service class. Each s
 
 * The **key** represents the sort name.
 * The **value** is either the **method name** to return the sort, or the value itself will be used as the **column name
-  **.
+  ** or **alias**.
 
 ```php
-class MyUtilitiesService extends UtilitiesService
+use RedaLabs\LaravelFilters\UtilitiesService;
+use RedaLabs\LaravelFilters\Sorts\Concretes\RawSort;
+
+class OrderUtilitiesService extends UtilitiesService
 {
     public function sorts(): array
     {
         return [
             'name' => 'customNameSort',
-            'created_at' => 'created_at',
+            'created_at' => 'orders.created_at',
         ];
     }
 
-    public function customNameSort(string $direction)
+    public function customNameSort(string $direction): BasicSort
     {
-        return new Sort('products.name', $direction);
+        return new RawSort("products.name {$direction}");
     }
 }
 ```
@@ -259,7 +295,7 @@ class MyUtilitiesService extends UtilitiesService
 Sort parameters are expected in the following format:
 
 ```
-/products?sorts[0][field]=name&&sorts[1][field]=created_at&sorts[1][direction]=desc
+/products?sorts[0][field]=name&sorts[1][field]=created_at&sorts[1][direction]=desc
 ```
 
 * The `direction` key is optional (asc is default).
@@ -273,11 +309,10 @@ class MyUtilitiesService extends UtilitiesService
 }
 ```
 
-📌 If a method is not found for a sort key, the key itself will be used as the column name.
-
-📘 [Explore Available Sorts →](#sorts)
+📘 [**Explore Available Sorts →**](#sorts)
 
 ---
+
 # Using the Utilities Service
 
 Inject and use it in your controller:
@@ -342,7 +377,7 @@ Returns the current Criteria instance.
 
 - Returns: The current Criteria instance
 
-#### `fresh(): self`
+#### `fresh(): UtilitiesService`
 
 Creates a new Criteria instance and resets the service.
 
@@ -354,7 +389,7 @@ Applies all valid filters from the request to the Criteria instance.
 
 - Returns: The current service instance
 
-#### `applySorts(): self`
+#### `applySorts(): UtilitiesService`
 
 Applies all valid sorts from the request to the Criteria instance.
 
@@ -487,18 +522,18 @@ class PostService extends UtilitiesService
 
     protected function applyAuthorFilter(Criteria $criteria, int $authorId): void
     {
-        $criteria->appendJoin(new Join('users', 'id', '=', 'posts.user_id', 'inner'));
+        $criteria->appendJoin(new Join('users', 'users.id', '=', 'posts.user_id', 'inner'));
         $criteria->appendCondition(new Condition('user_id', '=', $authorId));
     }
 
     protected function applyViewsSort(string $direction): BaseSort
     {
-        return new RawSort('views_count + likes_count', [], $direction);
+        return new RawSort('views_count + likes_count DESC');
     }
 
     protected function applyPopularitySort(string $direction): BaseSort
     {
-        return new RawSort('(views_count * 0.7) + (likes_count * 0.3)', [], $direction);
+        return new RawSort('(views_count * 0.7) + (likes_count * 0.3) DESC');
     }
 }
 ```
@@ -545,7 +580,7 @@ Removes a join from the criteria if it exists.
 
 - `$joinName`: The name of the join to remove
 
-#### `isJoinExists(string $joinName): bool`
+#### `joinExists(string $joinName): bool`
 
 Checks if a join exists in the criteria.
 
@@ -1266,7 +1301,7 @@ $sort = new RawSort('(price * quantity) DESC');
 $sort = new RawSort('LENGTH(name) ASC');
 
 // Sort with bindings
-$sort = new RawSort('FIELD(status, ?, ?, ?)', ['active', 'pending', 'inactive']);
+$sort = new RawSort('FIELD(status, ?, ?, ?) ASC', ['active', 'pending', 'inactive']);
 
 // Complex sorting with multiple conditions
 $sort = new RawSort('
