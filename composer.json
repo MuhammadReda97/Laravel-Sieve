@@ -1,6 +1,35 @@
 {
-  "name": "muhammadreda97/laravel-filters",
-  "description": "The Laravel Dynamic Filters and Sorts package is a powerful utility service designed to simplify the handling of dynamic filtering and sorting of data in your Laravel applications. With this package, you can effortlessly implement customizable and dynamic filters and sorts, making it easier to provide a seamless and tailored user experience.",
+  "name": "redalabs/laravel-filters",
+  "description": "Laravel Filters is a lightweight yet powerful filtering and sorting engine for Laravel applications. It transforms HTTP query parameters into clean, maintainable Eloquent or Query Builder queries with zero boilerplate. Built to follow SOLID and DRY principles, this modular package supports dynamic filtering, custom sorting, relationship constraints, and JSON field queries. Ideal for RESTful APIs, admin panels, and data-intensive applications, it keeps your controllers slim and your queries expressive — all while embracing Laravel best practices.",
+  "keywords": [
+    "laravel filters",
+    "laravel",
+    "filters",
+    "sorting",
+    "query builder",
+    "eloquent",
+    "eloquent filtering",
+    "api",
+    "restful",
+    "database queries",
+    "modular",
+    "dynamic filters",
+    "dynamic filters laravel",
+    "custom sorting",
+    "solidity",
+    "dry",
+    "json queries",
+    "admin panel",
+    "dashboard",
+    "eloquent filters",
+    "query optimization",
+    "query parameters",
+    "laravel filter query parameters",
+    "sort and filter laravel package",
+    "filter eloquent relations dynamically",
+    "filterable Laravel models",
+    "filterable eloquent models"
+  ],
   "type": "library",
   "license": "MIT",
   "authors": [
@@ -10,13 +39,12 @@
     }
   ],
   "require": {
-    "php": ">=8.1",
-    "illuminate/database": "^10.0|^11.0|^12.0",
-    "illuminate/http": "^10.0|^11.0|^12.0",
-    "illuminate/support": "^10.0|^11.0|^12.0"
+    "php": "^8.1",
+    "illuminate/support": "^10.0",
+    "illuminate/database": "^10.0"
   },
   "require-dev": {
-    "laravel/tinker": "^2.7",
+    "orchestra/testbench": "^8.0",
     "phpunit/phpunit": "^10.0"
   },
   "autoload": {
@@ -26,10 +54,19 @@
   },
   "autoload-dev": {
     "psr-4": {
-      "Tests\\": "tests/"
+      "RedaLabs\\LaravelFilters\\Tests\\": "tests/"
     }
   },
-
+  "extra": {
+    "laravel": {
+      "providers": [
+        "RedaLabs\\LaravelFilters\\LaravelFiltersServiceProvider"
+      ]
+    }
+  },
+  "config": {
+    "sort-packages": true
+  },
   "minimum-stability": "stable",
   "prefer-stable": true
 }
