@@ -1,6 +1,6 @@
 <?php
 
-namespace RedaLabs\LaravelFilters\Enums\Conditions;
+namespace ArchiTools\LaravelSieve\Enums\Conditions;
 
 enum GroupConditionTypeEnum: string
 {

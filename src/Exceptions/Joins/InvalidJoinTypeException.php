@@ -1,8 +1,8 @@
 <?php
 
-namespace RedaLabs\LaravelFilters\Exceptions\Joins;
+namespace ArchiTools\LaravelSieve\Exceptions\Joins;
 
-use RedaLabs\LaravelFilters\Enums\Joins\JoinTypeEnum;
+use ArchiTools\LaravelSieve\Enums\Joins\JoinTypeEnum;
 use RuntimeException;
 
 class InvalidJoinTypeException extends RuntimeException

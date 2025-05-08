@@ -1,21 +1,21 @@
 <?php
 
-namespace RedaLabs\LaravelFilters\Filters;
+namespace ArchiTools\LaravelSieve\Filters;
 
 use Exception;
-use RedaLabs\LaravelFilters\Criteria;
-use RedaLabs\LaravelFilters\Exceptions\Operators\InvalidOperatorException;
-use RedaLabs\LaravelFilters\Filters\Conditions\Concretes\Condition;
-use RedaLabs\LaravelFilters\Filters\Conditions\Concretes\DateCondition;
-use RedaLabs\LaravelFilters\Filters\Conditions\Concretes\GroupConditions;
-use RedaLabs\LaravelFilters\Filters\Conditions\Concretes\InCondition;
-use RedaLabs\LaravelFilters\Filters\Conditions\Concretes\JsonContainCondition;
-use RedaLabs\LaravelFilters\Filters\Conditions\Concretes\JsonContainsKeyCondition;
-use RedaLabs\LaravelFilters\Filters\Conditions\Concretes\NullCondition;
-use RedaLabs\LaravelFilters\Filters\Conditions\Concretes\WhenCondition;
-use RedaLabs\LaravelFilters\Filters\Contracts\Filter;
-use RedaLabs\LaravelFilters\Filters\Joins\Concretes\ClosureJoin;
-use RedaLabs\LaravelFilters\Filters\Joins\Concretes\Join;
+use ArchiTools\LaravelSieve\Criteria;
+use ArchiTools\LaravelSieve\Exceptions\Operators\InvalidOperatorException;
+use ArchiTools\LaravelSieve\Filters\Conditions\Concretes\Condition;
+use ArchiTools\LaravelSieve\Filters\Conditions\Concretes\DateCondition;
+use ArchiTools\LaravelSieve\Filters\Conditions\Concretes\GroupConditions;
+use ArchiTools\LaravelSieve\Filters\Conditions\Concretes\InCondition;
+use ArchiTools\LaravelSieve\Filters\Conditions\Concretes\JsonContainCondition;
+use ArchiTools\LaravelSieve\Filters\Conditions\Concretes\JsonContainsKeyCondition;
+use ArchiTools\LaravelSieve\Filters\Conditions\Concretes\NullCondition;
+use ArchiTools\LaravelSieve\Filters\Conditions\Concretes\WhenCondition;
+use ArchiTools\LaravelSieve\Filters\Contracts\Filter;
+use ArchiTools\LaravelSieve\Filters\Joins\Concretes\ClosureJoin;
+use ArchiTools\LaravelSieve\Filters\Joins\Concretes\Join;
 
 class UsersFilter implements Filter
 {

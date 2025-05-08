@@ -3,8 +3,8 @@
 namespace Unit\Exceptions;
 
 use PHPUnit\Framework\TestCase;
-use RedaLabs\LaravelFilters\Enums\Joins\JoinTypeEnum;
-use RedaLabs\LaravelFilters\Exceptions\Joins\InvalidJoinTypeException;
+use ArchiTools\LaravelSieve\Enums\Joins\JoinTypeEnum;
+use ArchiTools\LaravelSieve\Exceptions\Joins\InvalidJoinTypeException;
 
 class InvalidJoinTypeExceptionTest extends TestCase
 {

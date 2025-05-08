@@ -1,6 +1,6 @@
 <?php
 
-namespace RedaLabs\LaravelFilters;
+namespace ArchiTools\LaravelSieve;
 
 use Illuminate\Support\ServiceProvider;
 

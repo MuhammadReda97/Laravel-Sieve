@@ -1,6 +1,6 @@
 <?php
 
-namespace RedaLabs\LaravelFilters\Exceptions\Conditions;
+namespace ArchiTools\LaravelSieve\Exceptions\Conditions;
 
 use RuntimeException;
 

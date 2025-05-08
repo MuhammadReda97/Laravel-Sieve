@@ -2,11 +2,11 @@
 
 namespace Tests\Unit\Core;
 
-use RedaLabs\LaravelFilters\Criteria;
-use RedaLabs\LaravelFilters\Exceptions\Operators\InvalidOperatorException;
-use RedaLabs\LaravelFilters\Filters\Conditions\Concretes\Condition;
-use RedaLabs\LaravelFilters\Sorts\Concretes\Sort;
-use RedaLabs\LaravelFilters\UtilitiesService;
+use ArchiTools\LaravelSieve\Criteria;
+use ArchiTools\LaravelSieve\Exceptions\Operators\InvalidOperatorException;
+use ArchiTools\LaravelSieve\Filters\Conditions\Concretes\Condition;
+use ArchiTools\LaravelSieve\Sorts\Concretes\Sort;
+use ArchiTools\LaravelSieve\UtilitiesService;
 
 class ConcreteUtilitiesService extends UtilitiesService
 {

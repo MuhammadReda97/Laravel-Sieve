@@ -2,10 +2,10 @@
 
 namespace Tests\Unit\Core;
 
-use RedaLabs\LaravelFilters\Criteria;
-use RedaLabs\LaravelFilters\Exceptions\Operators\InvalidOperatorException;
-use RedaLabs\LaravelFilters\Filters\Conditions\Concretes\Condition;
-use RedaLabs\LaravelFilters\Filters\Contracts\Filter;
+use ArchiTools\LaravelSieve\Criteria;
+use ArchiTools\LaravelSieve\Exceptions\Operators\InvalidOperatorException;
+use ArchiTools\LaravelSieve\Filters\Conditions\Concretes\Condition;
+use ArchiTools\LaravelSieve\Filters\Contracts\Filter;
 
 readonly class NameFilter implements Filter
 {

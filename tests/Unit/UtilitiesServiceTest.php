@@ -3,11 +3,11 @@
 namespace Test\Unit;
 
 use Illuminate\Http\Request;
-use RedaLabs\LaravelFilters\Criteria;
-use RedaLabs\LaravelFilters\Enums\Operators\OperatorEnum;
-use RedaLabs\LaravelFilters\Enums\Sorts\SortDirectionEnum;
-use RedaLabs\LaravelFilters\Sorts\Concretes\Sort;
-use RedaLabs\LaravelFilters\Sorts\Contracts\BaseSort;
+use ArchiTools\LaravelSieve\Criteria;
+use ArchiTools\LaravelSieve\Enums\Operators\OperatorEnum;
+use ArchiTools\LaravelSieve\Enums\Sorts\SortDirectionEnum;
+use ArchiTools\LaravelSieve\Sorts\Concretes\Sort;
+use ArchiTools\LaravelSieve\Sorts\Contracts\BaseSort;
 use Tests\TestCase;
 use Tests\Unit\Core\ConcreteUtilitiesService;
 

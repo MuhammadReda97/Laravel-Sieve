@@ -3,8 +3,8 @@
 namespace Tests\Unit\Exceptions;
 
 use PHPUnit\Framework\TestCase;
-use RedaLabs\LaravelFilters\Enums\Operators\OperatorEnum;
-use RedaLabs\LaravelFilters\Exceptions\Operators\InvalidOperatorException;
+use ArchiTools\LaravelSieve\Enums\Operators\OperatorEnum;
+use ArchiTools\LaravelSieve\Exceptions\Operators\InvalidOperatorException;
 
 class InvalidOperatorExceptionTest extends TestCase
 {

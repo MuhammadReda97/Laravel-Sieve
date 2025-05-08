@@ -1,10 +1,10 @@
 <?php
 
-namespace RedaLabs\LaravelFilters\Filters\Conditions\Concretes;
+namespace ArchiTools\LaravelSieve\Filters\Conditions\Concretes;
 
 use Illuminate\Contracts\Database\Query\Builder;
 use InvalidArgumentException;
-use RedaLabs\LaravelFilters\Filters\Conditions\Contracts\BaseCondition;
+use ArchiTools\LaravelSieve\Filters\Conditions\Contracts\BaseCondition;
 
 class BetweenCondition extends BaseCondition
 {

@@ -2,10 +2,10 @@
 
 namespace Tests\Unit;
 
-use RedaLabs\LaravelFilters\Criteria;
-use RedaLabs\LaravelFilters\Filters\Conditions\Concretes\Condition;
-use RedaLabs\LaravelFilters\Filters\Joins\Concretes\Join;
-use RedaLabs\LaravelFilters\Sorts\Concretes\Sort;
+use ArchiTools\LaravelSieve\Criteria;
+use ArchiTools\LaravelSieve\Filters\Conditions\Concretes\Condition;
+use ArchiTools\LaravelSieve\Filters\Joins\Concretes\Join;
+use ArchiTools\LaravelSieve\Sorts\Concretes\Sort;
 use Tests\TestCase;
 
 class CriteriaTest extends TestCase

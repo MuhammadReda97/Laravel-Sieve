@@ -1,12 +1,12 @@
 <?php
 
-namespace RedaLabs\LaravelFilters;
+namespace ArchiTools\LaravelSieve;
 
 use Illuminate\Http\Request;
-use RedaLabs\LaravelFilters\Enums\Sorts\SortDirectionEnum;
-use RedaLabs\LaravelFilters\Filters\Contracts\Filter;
-use RedaLabs\LaravelFilters\Sorts\Concretes\Sort;
-use RedaLabs\LaravelFilters\Sorts\Contracts\BaseSort;
+use ArchiTools\LaravelSieve\Enums\Sorts\SortDirectionEnum;
+use ArchiTools\LaravelSieve\Filters\Contracts\Filter;
+use ArchiTools\LaravelSieve\Sorts\Concretes\Sort;
+use ArchiTools\LaravelSieve\Sorts\Contracts\BaseSort;
 
 /**
  * Abstract base class for implementing filtering and sorting functionality.

@@ -1,8 +1,8 @@
 <?php
 
-namespace RedaLabs\LaravelFilters\Filters\Contracts;
+namespace ArchiTools\LaravelSieve\Filters\Contracts;
 
-use RedaLabs\LaravelFilters\Criteria;
+use ArchiTools\LaravelSieve\Criteria;
 
 interface Filter
 {

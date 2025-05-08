@@ -1,11 +1,11 @@
 <?php
 
-namespace RedaLabs\LaravelFilters\Filters\Joins\Concretes;
+namespace ArchiTools\LaravelSieve\Filters\Joins\Concretes;
 
 use Closure;
 use Illuminate\Contracts\Database\Query\Builder;
-use RedaLabs\LaravelFilters\Enums\Joins\JoinTypeEnum;
-use RedaLabs\LaravelFilters\Filters\Joins\Contracts\BaseJoin;
+use ArchiTools\LaravelSieve\Enums\Joins\JoinTypeEnum;
+use ArchiTools\LaravelSieve\Filters\Joins\Contracts\BaseJoin;
 
 class ClosureJoin extends BaseJoin
 {

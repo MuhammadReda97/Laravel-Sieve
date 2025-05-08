@@ -3,11 +3,11 @@
 namespace Tests\Unit\Conditions;
 
 use Illuminate\Database\Query\Builder;
-use RedaLabs\LaravelFilters\Enums\Conditions\LogicalOperatorEnum;
-use RedaLabs\LaravelFilters\Enums\Operators\OperatorEnum;
-use RedaLabs\LaravelFilters\Exceptions\Conditions\InvalidLogicalOperatorException;
-use RedaLabs\LaravelFilters\Exceptions\Operators\InvalidOperatorException;
-use RedaLabs\LaravelFilters\Filters\Conditions\Concretes\Condition;
+use ArchiTools\LaravelSieve\Enums\Conditions\LogicalOperatorEnum;
+use ArchiTools\LaravelSieve\Enums\Operators\OperatorEnum;
+use ArchiTools\LaravelSieve\Exceptions\Conditions\InvalidLogicalOperatorException;
+use ArchiTools\LaravelSieve\Exceptions\Operators\InvalidOperatorException;
+use ArchiTools\LaravelSieve\Filters\Conditions\Concretes\Condition;
 use Tests\TestCase;
 use TypeError;
 

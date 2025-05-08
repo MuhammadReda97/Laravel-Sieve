@@ -3,9 +3,9 @@
 namespace Tests\Unit\Conditions;
 
 use Illuminate\Database\Query\Builder;
-use RedaLabs\LaravelFilters\Enums\Conditions\LogicalOperatorEnum;
-use RedaLabs\LaravelFilters\Exceptions\Conditions\InvalidLogicalOperatorException;
-use RedaLabs\LaravelFilters\Filters\Conditions\Concretes\JsonContainCondition;
+use ArchiTools\LaravelSieve\Enums\Conditions\LogicalOperatorEnum;
+use ArchiTools\LaravelSieve\Exceptions\Conditions\InvalidLogicalOperatorException;
+use ArchiTools\LaravelSieve\Filters\Conditions\Concretes\JsonContainCondition;
 use Tests\TestCase;
 
 class JsonContainConditionTest extends TestCase

@@ -1,9 +1,9 @@
 <?php
 
-namespace RedaLabs\LaravelFilters\Sorts\Concretes;
+namespace ArchiTools\LaravelSieve\Sorts\Concretes;
 
 use Illuminate\Contracts\Database\Query\Builder;
-use RedaLabs\LaravelFilters\Sorts\Contracts\BaseSort;
+use ArchiTools\LaravelSieve\Sorts\Contracts\BaseSort;
 
 /**
  * Represents a raw SQL sort operation on a database query.

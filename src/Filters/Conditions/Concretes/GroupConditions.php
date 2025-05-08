@@ -1,13 +1,13 @@
 <?php
 
-namespace RedaLabs\LaravelFilters\Filters\Conditions\Concretes;
+namespace ArchiTools\LaravelSieve\Filters\Conditions\Concretes;
 
 use Exception;
 use Illuminate\Contracts\Database\Query\Builder;
-use RedaLabs\LaravelFilters\Enums\Conditions\GroupConditionTypeEnum;
-use RedaLabs\LaravelFilters\Exceptions\Conditions\EmptyGroupConditionsException;
-use RedaLabs\LaravelFilters\Exceptions\Conditions\MixedGroupConditionException;
-use RedaLabs\LaravelFilters\Filters\Conditions\Contracts\BaseCondition;
+use ArchiTools\LaravelSieve\Enums\Conditions\GroupConditionTypeEnum;
+use ArchiTools\LaravelSieve\Exceptions\Conditions\EmptyGroupConditionsException;
+use ArchiTools\LaravelSieve\Exceptions\Conditions\MixedGroupConditionException;
+use ArchiTools\LaravelSieve\Filters\Conditions\Contracts\BaseCondition;
 
 class GroupConditions extends BaseCondition
 {

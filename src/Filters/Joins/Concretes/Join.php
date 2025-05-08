@@ -1,13 +1,13 @@
 <?php
 
-namespace RedaLabs\LaravelFilters\Filters\Joins\Concretes;
+namespace ArchiTools\LaravelSieve\Filters\Joins\Concretes;
 
 use Illuminate\Contracts\Database\Query\Builder;
-use RedaLabs\LaravelFilters\Enums\Joins\JoinTypeEnum;
-use RedaLabs\LaravelFilters\Enums\Operators\OperatorEnum;
-use RedaLabs\LaravelFilters\Exceptions\Operators\InvalidOperatorException;
-use RedaLabs\LaravelFilters\Filters\Conditions\Contracts\BaseCondition;
-use RedaLabs\LaravelFilters\Filters\Joins\Contracts\BaseJoin;
+use ArchiTools\LaravelSieve\Enums\Joins\JoinTypeEnum;
+use ArchiTools\LaravelSieve\Enums\Operators\OperatorEnum;
+use ArchiTools\LaravelSieve\Exceptions\Operators\InvalidOperatorException;
+use ArchiTools\LaravelSieve\Filters\Conditions\Contracts\BaseCondition;
+use ArchiTools\LaravelSieve\Filters\Joins\Contracts\BaseJoin;
 
 class Join extends BaseJoin
 {

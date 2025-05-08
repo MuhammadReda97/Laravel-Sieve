@@ -1,8 +1,8 @@
 <?php
 
-namespace RedaLabs\LaravelFilters\Exceptions\Conditions;
+namespace ArchiTools\LaravelSieve\Exceptions\Conditions;
 
-use RedaLabs\LaravelFilters\Enums\Conditions\LogicalOperatorEnum;
+use ArchiTools\LaravelSieve\Enums\Conditions\LogicalOperatorEnum;
 use RuntimeException;
 
 class InvalidLogicalOperatorException extends RuntimeException

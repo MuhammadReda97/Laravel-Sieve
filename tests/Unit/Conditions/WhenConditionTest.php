@@ -3,13 +3,13 @@
 namespace Tests\Unit\Conditions;
 
 use Illuminate\Database\Query\Builder;
-use RedaLabs\LaravelFilters\Filters\Conditions\Concretes\BetweenCondition;
-use RedaLabs\LaravelFilters\Filters\Conditions\Concretes\Condition;
-use RedaLabs\LaravelFilters\Filters\Conditions\Concretes\GroupConditions;
-use RedaLabs\LaravelFilters\Filters\Conditions\Concretes\InCondition;
-use RedaLabs\LaravelFilters\Filters\Conditions\Concretes\NullCondition;
-use RedaLabs\LaravelFilters\Filters\Conditions\Concretes\RawCondition;
-use RedaLabs\LaravelFilters\Filters\Conditions\Concretes\WhenCondition;
+use ArchiTools\LaravelSieve\Filters\Conditions\Concretes\BetweenCondition;
+use ArchiTools\LaravelSieve\Filters\Conditions\Concretes\Condition;
+use ArchiTools\LaravelSieve\Filters\Conditions\Concretes\GroupConditions;
+use ArchiTools\LaravelSieve\Filters\Conditions\Concretes\InCondition;
+use ArchiTools\LaravelSieve\Filters\Conditions\Concretes\NullCondition;
+use ArchiTools\LaravelSieve\Filters\Conditions\Concretes\RawCondition;
+use ArchiTools\LaravelSieve\Filters\Conditions\Concretes\WhenCondition;
 use Tests\TestCase;
 
 class WhenConditionTest extends TestCase

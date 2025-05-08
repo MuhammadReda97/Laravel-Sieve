@@ -4,9 +4,9 @@ namespace Tests\Unit\Sorts;
 
 use Illuminate\Database\Query\Builder;
 use PHPUnit\Framework\MockObject\MockObject;
-use RedaLabs\LaravelFilters\Enums\Sorts\SortDirectionEnum;
-use RedaLabs\LaravelFilters\Exceptions\Sorts\InvalidSortDirectionException;
-use RedaLabs\LaravelFilters\Sorts\Concretes\Sort;
+use ArchiTools\LaravelSieve\Enums\Sorts\SortDirectionEnum;
+use ArchiTools\LaravelSieve\Exceptions\Sorts\InvalidSortDirectionException;
+use ArchiTools\LaravelSieve\Sorts\Concretes\Sort;
 use Tests\TestCase;
 
 class SortTest extends TestCase

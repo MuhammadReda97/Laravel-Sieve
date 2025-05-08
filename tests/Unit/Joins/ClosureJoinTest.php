@@ -3,9 +3,9 @@
 namespace Unit\Joins;
 
 use Closure;
-use RedaLabs\LaravelFilters\Enums\Joins\JoinTypeEnum;
-use RedaLabs\LaravelFilters\Exceptions\Joins\InvalidJoinTypeException;
-use RedaLabs\LaravelFilters\Filters\Joins\Concretes\ClosureJoin;
+use ArchiTools\LaravelSieve\Enums\Joins\JoinTypeEnum;
+use ArchiTools\LaravelSieve\Exceptions\Joins\InvalidJoinTypeException;
+use ArchiTools\LaravelSieve\Filters\Joins\Concretes\ClosureJoin;
 use Tests\TestCase;
 use TypeError;
 

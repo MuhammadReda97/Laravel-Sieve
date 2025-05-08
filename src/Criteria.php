@@ -1,12 +1,12 @@
 <?php
 
-namespace RedaLabs\LaravelFilters;
+namespace ArchiTools\LaravelSieve;
 
 use Illuminate\Contracts\Database\Query\Builder;
-use RedaLabs\LaravelFilters\Filters\Conditions\Contracts\BaseCondition;
-use RedaLabs\LaravelFilters\Filters\Joins\Contracts\BaseJoin;
-use RedaLabs\LaravelFilters\Sorts\Concretes\Sort;
-use RedaLabs\LaravelFilters\Sorts\Contracts\BaseSort;
+use ArchiTools\LaravelSieve\Filters\Conditions\Contracts\BaseCondition;
+use ArchiTools\LaravelSieve\Filters\Joins\Contracts\BaseJoin;
+use ArchiTools\LaravelSieve\Sorts\Concretes\Sort;
+use ArchiTools\LaravelSieve\Sorts\Contracts\BaseSort;
 
 /**
  * Main orchestrator class for managing and applying query modifications.

@@ -1,6 +1,6 @@
 <?php
 
-namespace RedaLabs\LaravelFilters\Exceptions\Sorts;
+namespace ArchiTools\LaravelSieve\Exceptions\Sorts;
 
 use RuntimeException;
 

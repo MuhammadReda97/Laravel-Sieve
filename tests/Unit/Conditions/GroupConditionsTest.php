@@ -3,15 +3,15 @@
 namespace Tests\Unit\Conditions;
 
 use Illuminate\Database\Query\Builder;
-use RedaLabs\LaravelFilters\Enums\Conditions\GroupConditionTypeEnum;
-use RedaLabs\LaravelFilters\Exceptions\Conditions\EmptyGroupConditionsException;
-use RedaLabs\LaravelFilters\Exceptions\Conditions\MixedGroupConditionException;
-use RedaLabs\LaravelFilters\Filters\Conditions\Concretes\AggregationCondition;
-use RedaLabs\LaravelFilters\Filters\Conditions\Concretes\Condition;
-use RedaLabs\LaravelFilters\Filters\Conditions\Concretes\DateCondition;
-use RedaLabs\LaravelFilters\Filters\Conditions\Concretes\GroupConditions;
-use RedaLabs\LaravelFilters\Filters\Conditions\Concretes\NullCondition;
-use RedaLabs\LaravelFilters\Filters\Conditions\Concretes\WhenCondition;
+use ArchiTools\LaravelSieve\Enums\Conditions\GroupConditionTypeEnum;
+use ArchiTools\LaravelSieve\Exceptions\Conditions\EmptyGroupConditionsException;
+use ArchiTools\LaravelSieve\Exceptions\Conditions\MixedGroupConditionException;
+use ArchiTools\LaravelSieve\Filters\Conditions\Concretes\AggregationCondition;
+use ArchiTools\LaravelSieve\Filters\Conditions\Concretes\Condition;
+use ArchiTools\LaravelSieve\Filters\Conditions\Concretes\DateCondition;
+use ArchiTools\LaravelSieve\Filters\Conditions\Concretes\GroupConditions;
+use ArchiTools\LaravelSieve\Filters\Conditions\Concretes\NullCondition;
+use ArchiTools\LaravelSieve\Filters\Conditions\Concretes\WhenCondition;
 use Tests\TestCase;
 
 class GroupConditionsTest extends TestCase

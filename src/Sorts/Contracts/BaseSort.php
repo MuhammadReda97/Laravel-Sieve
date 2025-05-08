@@ -1,10 +1,10 @@
 <?php
 
-namespace RedaLabs\LaravelFilters\Sorts\Contracts;
+namespace ArchiTools\LaravelSieve\Sorts\Contracts;
 
 use Illuminate\Contracts\Database\Query\Builder;
-use RedaLabs\LaravelFilters\Enums\Sorts\SortDirectionEnum;
-use RedaLabs\LaravelFilters\Exceptions\Sorts\InvalidSortDirectionException;
+use ArchiTools\LaravelSieve\Enums\Sorts\SortDirectionEnum;
+use ArchiTools\LaravelSieve\Exceptions\Sorts\InvalidSortDirectionException;
 
 /**
  * Abstract base class for sort operations.

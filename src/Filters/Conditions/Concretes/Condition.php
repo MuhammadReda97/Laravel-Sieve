@@ -1,11 +1,11 @@
 <?php
 
-namespace RedaLabs\LaravelFilters\Filters\Conditions\Concretes;
+namespace ArchiTools\LaravelSieve\Filters\Conditions\Concretes;
 
 use Illuminate\Contracts\Database\Query\Builder;
-use RedaLabs\LaravelFilters\Enums\Operators\OperatorEnum;
-use RedaLabs\LaravelFilters\Exceptions\Operators\InvalidOperatorException;
-use RedaLabs\LaravelFilters\Filters\Conditions\Contracts\BaseCondition;
+use ArchiTools\LaravelSieve\Enums\Operators\OperatorEnum;
+use ArchiTools\LaravelSieve\Exceptions\Operators\InvalidOperatorException;
+use ArchiTools\LaravelSieve\Filters\Conditions\Contracts\BaseCondition;
 
 class Condition extends BaseCondition
 {

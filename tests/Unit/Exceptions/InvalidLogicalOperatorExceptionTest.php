@@ -3,8 +3,8 @@
 namespace Tests\Unit\Exceptions;
 
 use PHPUnit\Framework\TestCase;
-use RedaLabs\LaravelFilters\Enums\Conditions\LogicalOperatorEnum;
-use RedaLabs\LaravelFilters\Exceptions\Conditions\InvalidLogicalOperatorException;
+use ArchiTools\LaravelSieve\Enums\Conditions\LogicalOperatorEnum;
+use ArchiTools\LaravelSieve\Exceptions\Conditions\InvalidLogicalOperatorException;
 
 class InvalidLogicalOperatorExceptionTest extends TestCase
 {

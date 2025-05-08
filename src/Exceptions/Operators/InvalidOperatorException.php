@@ -1,8 +1,8 @@
 <?php
 
-namespace RedaLabs\LaravelFilters\Exceptions\Operators;
+namespace ArchiTools\LaravelSieve\Exceptions\Operators;
 
-use RedaLabs\LaravelFilters\Enums\Operators\OperatorEnum;
+use ArchiTools\LaravelSieve\Enums\Operators\OperatorEnum;
 use RuntimeException;
 
 class InvalidOperatorException extends RuntimeException

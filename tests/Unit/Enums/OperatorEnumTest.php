@@ -3,7 +3,7 @@
 namespace Tests\Unit\Enums;
 
 use PHPUnit\Framework\TestCase;
-use RedaLabs\LaravelFilters\Enums\Operators\OperatorEnum;
+use ArchiTools\LaravelSieve\Enums\Operators\OperatorEnum;
 
 class OperatorEnumTest extends TestCase
 {

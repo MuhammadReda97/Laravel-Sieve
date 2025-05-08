@@ -3,13 +3,13 @@
 namespace Unit\Joins;
 
 use Illuminate\Database\Query\Builder;
-use RedaLabs\LaravelFilters\Enums\Joins\JoinTypeEnum;
-use RedaLabs\LaravelFilters\Enums\Operators\OperatorEnum;
-use RedaLabs\LaravelFilters\Exceptions\Joins\InvalidJoinTypeException;
-use RedaLabs\LaravelFilters\Exceptions\Operators\InvalidOperatorException;
-use RedaLabs\LaravelFilters\Filters\Conditions\Concretes\Condition;
-use RedaLabs\LaravelFilters\Filters\Conditions\Concretes\InCondition;
-use RedaLabs\LaravelFilters\Filters\Joins\Concretes\Join;
+use ArchiTools\LaravelSieve\Enums\Joins\JoinTypeEnum;
+use ArchiTools\LaravelSieve\Enums\Operators\OperatorEnum;
+use ArchiTools\LaravelSieve\Exceptions\Joins\InvalidJoinTypeException;
+use ArchiTools\LaravelSieve\Exceptions\Operators\InvalidOperatorException;
+use ArchiTools\LaravelSieve\Filters\Conditions\Concretes\Condition;
+use ArchiTools\LaravelSieve\Filters\Conditions\Concretes\InCondition;
+use ArchiTools\LaravelSieve\Filters\Joins\Concretes\Join;
 use Tests\TestCase;
 
 class JoinTest extends TestCase

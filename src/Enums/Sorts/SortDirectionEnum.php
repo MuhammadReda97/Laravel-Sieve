@@ -1,6 +1,6 @@
 <?php
 
-namespace RedaLabs\LaravelFilters\Enums\Sorts;
+namespace ArchiTools\LaravelSieve\Enums\Sorts;
 
 enum SortDirectionEnum: string
 {

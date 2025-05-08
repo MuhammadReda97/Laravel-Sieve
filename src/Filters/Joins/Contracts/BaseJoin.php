@@ -1,10 +1,10 @@
 <?php
 
-namespace RedaLabs\LaravelFilters\Filters\Joins\Contracts;
+namespace ArchiTools\LaravelSieve\Filters\Joins\Contracts;
 
 use Illuminate\Contracts\Database\Query\Builder;
-use RedaLabs\LaravelFilters\Enums\Joins\JoinTypeEnum;
-use RedaLabs\LaravelFilters\Exceptions\Joins\InvalidJoinTypeException;
+use ArchiTools\LaravelSieve\Enums\Joins\JoinTypeEnum;
+use ArchiTools\LaravelSieve\Exceptions\Joins\InvalidJoinTypeException;
 
 abstract class BaseJoin
 {

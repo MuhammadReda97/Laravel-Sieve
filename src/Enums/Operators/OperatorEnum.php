@@ -1,6 +1,6 @@
 <?php
 
-namespace RedaLabs\LaravelFilters\Enums\Operators;
+namespace ArchiTools\LaravelSieve\Enums\Operators;
 
 enum OperatorEnum: string
 {

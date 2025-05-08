@@ -2,7 +2,7 @@
 
 namespace Tests\Unit\Sorts;
 
-use RedaLabs\LaravelFilters\Sorts\Concretes\RawSort;
+use ArchiTools\LaravelSieve\Sorts\Concretes\RawSort;
 use Tests\TestCase;
 
 class RawSortTest extends TestCase

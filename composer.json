@@ -1,9 +1,11 @@
 {
-  "name": "redalabs/laravel-filters",
-  "description": "Laravel Filters is a lightweight yet powerful filtering and sorting engine for Laravel applications. It transforms HTTP query parameters into clean, maintainable Eloquent or Query Builder queries with zero boilerplate. Built to follow SOLID and DRY principles, this modular package supports dynamic filtering, custom sorting, relationship constraints, and JSON field queries. Ideal for RESTful APIs, admin panels, and data-intensive applications, it keeps your controllers slim and your queries expressive — all while embracing Laravel best practices.",
+  "name": "architools/laravel-sieve",
+  "description": "Laravel Sieve is a lightweight yet powerful filtering and sorting engine for Laravel applications. It transforms HTTP query parameters into clean, maintainable Eloquent or Query Builder queries with zero boilerplate. Built to follow SOLID and DRY principles, this modular package supports dynamic filtering, custom sorting, relationship constraints, and JSON field queries. Ideal for RESTful APIs, admin panels, and data-intensive applications, it keeps your controllers slim and your queries expressive — all while embracing Laravel best practices.",
   "keywords": [
+    "laravel sieve",
     "laravel filters",
     "laravel",
+    "laravel package",
     "filters",
     "sorting",
     "query builder",
@@ -49,18 +51,18 @@
   },
   "autoload": {
     "psr-4": {
-      "RedaLabs\\LaravelFilters\\": "src/"
+      "ArchiTools\\LaravelSieve\\": "src/"
     }
   },
   "autoload-dev": {
     "psr-4": {
-      "RedaLabs\\LaravelFilters\\Tests\\": "tests/"
+      "Tests\\": "tests/"
     }
   },
   "extra": {
     "laravel": {
       "providers": [
-        "RedaLabs\\LaravelFilters\\LaravelFiltersServiceProvider"
+        "ArchiTools\\LaravelSieve\\LaravelFiltersServiceProvider"
       ]
     }
   },

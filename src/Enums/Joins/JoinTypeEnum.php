@@ -1,6 +1,6 @@
 <?php
 
-namespace RedaLabs\LaravelFilters\Enums\Joins;
+namespace ArchiTools\LaravelSieve\Enums\Joins;
 
 enum JoinTypeEnum: string
 {

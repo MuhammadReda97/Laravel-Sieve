@@ -1,6 +1,6 @@
 <?php
 
-namespace RedaLabs\LaravelFilters\Filters\Conditions\Concretes;
+namespace ArchiTools\LaravelSieve\Filters\Conditions\Concretes;
 
 use Illuminate\Contracts\Database\Query\Builder;
 

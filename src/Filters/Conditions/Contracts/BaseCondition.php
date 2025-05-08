@@ -1,10 +1,10 @@
 <?php
 
-namespace RedaLabs\LaravelFilters\Filters\Conditions\Contracts;
+namespace ArchiTools\LaravelSieve\Filters\Conditions\Contracts;
 
 use Illuminate\Contracts\Database\Query\Builder;
-use RedaLabs\LaravelFilters\Enums\Conditions\LogicalOperatorEnum;
-use RedaLabs\LaravelFilters\Exceptions\Conditions\InvalidLogicalOperatorException;
+use ArchiTools\LaravelSieve\Enums\Conditions\LogicalOperatorEnum;
+use ArchiTools\LaravelSieve\Exceptions\Conditions\InvalidLogicalOperatorException;
 
 abstract class BaseCondition
 {

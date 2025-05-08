@@ -3,7 +3,7 @@
 namespace Unit\Exceptions;
 
 use PHPUnit\Framework\TestCase;
-use RedaLabs\LaravelFilters\Exceptions\Sorts\InvalidSortDirectionException;
+use ArchiTools\LaravelSieve\Exceptions\Sorts\InvalidSortDirectionException;
 
 class InvalidSortDirectionExceptionTest extends TestCase
 {
