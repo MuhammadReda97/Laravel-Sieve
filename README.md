@@ -1,13 +1,13 @@
 # Introduction
 
-**Laravel Filters** is a **modular**, **scalable** filtering engine designed to keep your codebase clean, maintainable,
+**Laravel Sieve** is a **modular**, **scalable** filtering engine designed to keep your codebase clean, maintainable,
 and easy to extend.
 It eliminates **bloated controllers** and **scattered if statements** with a structured, composable approach to dynamic,
 request-driven query filtering.
 By isolating filter logic into well-defined, **single-responsibility** classes, it enforces true **separation of
 concerns** while staying fully aligned with **SOLID** and **DRY** principles.
 
-Whether you're building RESTful APIs, admin panels, or data-intensive applications, **Laravel Filters** fits right in —
+Whether you're building RESTful APIs, admin panels, or data-intensive applications, **Laravel Sieve** fits right in —
 offering the flexibility and structure needed for modern Laravel projects:
 
 🧱 Decouple business logic with focused, single-responsibility filter classes.
@@ -32,7 +32,7 @@ Designed for scalability, and developer satisfaction.
 1. Install the package via Composer:
 
 ```bash
-composer require redalabs/laravel-filters
+composer require architools/laravel-sieve
 ```
 
 # Table of Contents
@@ -60,7 +60,7 @@ composer require redalabs/laravel-filters
 To begin, define your own service class that extends the base `UtilitiesService` class:
 
 ```php
-use RedaLabs\LaravelFilters\UtilitiesService;
+use ArchiTools\LaravelSieve\UtilitiesService;
 
 class MyUtilitiesService extends UtilitiesService
 {
@@ -77,9 +77,9 @@ Define available filters inside the `filters()` method of your service class. Ea
 * The **value** is either a method name to handle the filter implementation or a `Filter` instance.
 
 ```php
-use RedaLabs\LaravelFilters\UtilitiesService;
-use RedaLabs\LaravelFilters\Criteria;
-use RedaLabs\LaravelFilters\Filters\Conditions\Concretes\Condition;
+use ArchiTools\LaravelSieve\UtilitiesService;
+use ArchiTools\LaravelSieve\Criteria;
+use ArchiTools\LaravelSieve\Filters\Conditions\Concretes\Condition;
 
 class ProductUtilitiesService extends UtilitiesService
 {
@@ -115,8 +115,8 @@ Always validate filter values using Form Requests, or another approach you prefe
 Need to use Join's in filters? No problem — just append them inside your filter method:
 
 ```php
-use RedaLabs\LaravelFilters\Filters\Joins\Concretes\Join;
-use RedaLabs\LaravelFilters\Filters\Conditions\Concretes\Condition;
+use ArchiTools\LaravelSieve\Filters\Joins\Concretes\Join;
+use ArchiTools\LaravelSieve\Filters\Conditions\Concretes\Condition;
 
 $criteria->appendJoin(
     new Join('product_categories', 'categories.id = products.category_id')
@@ -130,8 +130,8 @@ $criteria->appendCondition(
 You can even attach conditions directly to the join:
 
 ```php
-use RedaLabs\LaravelFilters\Filters\Joins\Concretes\Join;
-use RedaLabs\LaravelFilters\Filters\Conditions\Concretes\Condition;
+use ArchiTools\LaravelSieve\Filters\Joins\Concretes\Join;
+use ArchiTools\LaravelSieve\Filters\Conditions\Concretes\Condition;
 
 $criteria->appendJoin(
     (new Join('product_categories', 'categories.id = products.category_id'))
@@ -144,7 +144,7 @@ $criteria->appendJoin(
 already exists:
 
 ```php
-use RedaLabs\LaravelFilters\Filters\Joins\Concretes\Join;
+use ArchiTools\LaravelSieve\Filters\Joins\Concretes\Join;
 
 if (!$criteria->joinExists('product_categories')) {
     $criteria->appendJoin(new Join('product_categories', 'categories.id = products.category_id'));
@@ -157,10 +157,10 @@ Appending a join with an existing name will overwrite the previous one.
 #### Example with Multiple Filters Using Joins
 
 ```php
-use RedaLabs\LaravelFilters\Filters\Joins\Concretes\Join;
-use RedaLabs\LaravelFilters\Filters\Conditions\Concretes\{Condition, AggregationCondition};
-use RedaLabs\LaravelFilters\UtilitiesService;
-use RedaLabs\LaravelFilters\Criteria;
+use ArchiTools\LaravelSieve\Filters\Joins\Concretes\Join;
+use ArchiTools\LaravelSieve\Filters\Conditions\Concretes\{Condition, AggregationCondition};
+use ArchiTools\LaravelSieve\UtilitiesService;
+use ArchiTools\LaravelSieve\Criteria;
 
 class MyUtilitiesService extends UtilitiesService
 {
@@ -205,10 +205,10 @@ You can reuse common filters across services by implementing the `Filter` interf
 ```php
 namespace App\Utilities\Filters;
 
-use RedaLabs\LaravelFilters\Filters\Contracts\Filter;
-use RedaLabs\LaravelFilters\Criteria;
-use RedaLabs\LaravelFilters\Filters\Joins\Concretes\Join;
-use RedaLabs\LaravelFilters\Filters\Conditions\Concretes\Condition;
+use ArchiTools\LaravelSieve\Filters\Contracts\Filter;
+use ArchiTools\LaravelSieve\Criteria;
+use ArchiTools\LaravelSieve\Filters\Joins\Concretes\Join;
+use ArchiTools\LaravelSieve\Filters\Conditions\Concretes\Condition;
 
 class ProductCategoryNameFilter implements Filter
 {
@@ -227,7 +227,7 @@ To apply a reusable filter class in your service, simply register it in the `fil
 ```php
 namespace App\Utilities;
 
-use RedaLabs\LaravelFilters\UtilitiesService;
+use ArchiTools\LaravelSieve\UtilitiesService;
 use App\Utilities\Filters\ProductCategoryNameFilter;
 
 class ProductUtilitiesService extends UtilitiesService
@@ -247,7 +247,7 @@ filter class to accept a column name and use it dynamically in the `apply()` met
 You can reuse it in other services too:
 
 ```php
-use RedaLabs\LaravelFilters\UtilitiesService;
+use ArchiTools\LaravelSieve\UtilitiesService;
 use App\Utilities\Filters\ProductCategoryNameFilter;
 
 class DashboardUtilitiesService extends UtilitiesService
@@ -275,9 +275,9 @@ Define available sorts inside the `sorts()` method of your service class. Each s
     * A string representing a `column name` or `alias`, which will be used directly for sorting
 
 ```php
-use RedaLabs\LaravelFilters\UtilitiesService;
-use RedaLabs\LaravelFilters\Sorts\Concretes\RawSort;
-use RedaLabs\LaravelFilters\Sorts\Contracts\BaseSort;
+use ArchiTools\LaravelSieve\UtilitiesService;
+use ArchiTools\LaravelSieve\Sorts\Concretes\RawSort;
+use ArchiTools\LaravelSieve\Sorts\Contracts\BaseSort;
 
 class OrderUtilitiesService extends UtilitiesService
 {
@@ -307,7 +307,7 @@ Sorts query parameters are expected in the following format:
 * The sorts key can be customized by overriding the `$sortsKey` property:
 
 ```php
-use RedaLabs\LaravelFilters\UtilitiesService;
+use ArchiTools\LaravelSieve\UtilitiesService;
 
 class MyUtilitiesService extends UtilitiesService
 {
@@ -348,7 +348,7 @@ class ProductController extends Controller
 **Utilize the `Criteria` object to modify the`builder` instance**
 
 ```php
-use RedaLabs\LaravelFilters\Criteria;
+use ArchiTools\LaravelSieve\Criteria;
 
 class ProductRepository
 {
@@ -449,11 +449,11 @@ protected function sorts(): array
 #### Basic Implementation
 
 ```php
-use RedaLabs\LaravelFilters\UtilitiesService;
-use RedaLabs\LaravelFilters\Criteria;
+use ArchiTools\LaravelSieve\UtilitiesService;
+use ArchiTools\LaravelSieve\Criteria;
 use Illuminate\Http\Request;
 use App\Utilities\Filters\{StatusFilter, RoleFilter};
-use RedaLabs\LaravelFilters\Filters\Conditions\Concretes\Condition;
+use ArchiTools\LaravelSieve\Filters\Conditions\Concretes\Condition;
 
 class UserService extends UtilitiesService
 {
@@ -487,19 +487,19 @@ class UserService extends UtilitiesService
 #### Complex Implementation
 
 ```php
-use RedaLabs\LaravelFilters\UtilitiesService;
-use RedaLabs\LaravelFilters\Criteria;
+use ArchiTools\LaravelSieve\UtilitiesService;
+use ArchiTools\LaravelSieve\Criteria;
 use Illuminate\Http\Request;
 use App\Utilities\Filters\{
     StatusFilter,
     CategoryFilter,
     TagsFilter};
-use RedaLabs\LaravelFilters\Filters\Joins\Concretes\Join;
-use RedaLabs\LaravelFilters\Filters\Conditions\Concretes\{
+use ArchiTools\LaravelSieve\Filters\Joins\Concretes\Join;
+use ArchiTools\LaravelSieve\Filters\Conditions\Concretes\{
     Condition,
     BetweenCondition
 };
-use RedaLabs\LaravelFilters\Filters\Sorts\Concretes\RawSort;
+use ArchiTools\LaravelSieve\Filters\Sorts\Concretes\RawSort;
 
 class PostService extends UtilitiesService
 {
@@ -567,7 +567,7 @@ class PostService extends UtilitiesService
 
 ## Criteria
 
-The `Criteria` class is the main orchestrator of the Laravel Filters package. It manages and applies joins, conditions,
+The `Criteria` class is the main orchestrator of the Laravel Sieve package. It manages and applies joins, conditions,
 and sorts to your query builder in a structured and organized way.
 
 ### Purpose
@@ -627,15 +627,15 @@ Applies all joins, conditions, and sorts to the query builder in the correct ord
 ### Example
 
 ```php
-use RedaLabs\LaravelFilters\Criteria;
-use RedaLabs\LaravelFilters\Joins\Concretes\Join;
-use RedaLabs\LaravelFilters\Conditions\Concretes\{
+use ArchiTools\LaravelSieve\Criteria;
+use ArchiTools\LaravelSieve\Joins\Concretes\Join;
+use ArchiTools\LaravelSieve\Conditions\Concretes\{
     Condition,
     BetweenCondition,
     InCondition,
     GroupConditions
 };
-use RedaLabs\LaravelFilters\Sorts\Concretes\Sort;
+use ArchiTools\LaravelSieve\Sorts\Concretes\Sort;
 
 $criteria = new Criteria();
 
@@ -702,7 +702,7 @@ operations between a `field` and a `value`.
 **Example**:
 
 ```php
-use RedaLabs\LaravelFilters\Filters\Conditions\Concretes\Condition;
+use ArchiTools\LaravelSieve\Filters\Conditions\Concretes\Condition;
 
 // Simple equality check
 $condition = new Condition('name', '=', 'John');
@@ -733,7 +733,7 @@ $condition = new Condition('status', '=', 'active', 'or');
 **Example**:
 
 ```php
-use RedaLabs\LaravelFilters\Filters\Conditions\Concretes\ColumnCondition;
+use ArchiTools\LaravelSieve\Filters\Conditions\Concretes\ColumnCondition;
 
 // Compare two columns
 $condition = new ColumnCondition('products.price', '>', 'categories.min_price');
@@ -765,7 +765,7 @@ $condition = new ColumnCondition('products.stock', '<', 'suppliers.min_stock', '
 **Example**:
 
 ```php
-use RedaLabs\LaravelFilters\Filters\Conditions\Concretes\JsonContainCondition;
+use ArchiTools\LaravelSieve\Filters\Conditions\Concretes\JsonContainCondition;
 
 // Check if tags array contains 'php'
 $condition = new JsonContainCondition('tags', 'php');
@@ -793,7 +793,7 @@ data.
 **Example**:
 
 ```php
-use RedaLabs\LaravelFilters\Filters\Conditions\Concretes\JsonContainsKeyCondition;
+use ArchiTools\LaravelSieve\Filters\Conditions\Concretes\JsonContainsKeyCondition;
 
 // Check if preferences has 'notifications' key
 $condition = new JsonContainsKeyCondition('preferences->notifications');
@@ -814,7 +814,7 @@ $condition = new JsonContainsKeyCondition('preferences->notifications');
 **Example**:
 
 ```php
-use RedaLabs\LaravelFilters\Filters\Conditions\Concretes\JsonLengthCondition;
+use ArchiTools\LaravelSieve\Filters\Conditions\Concretes\JsonLengthCondition;
 
 // Check if tags array has more than 2 items
 $condition = new JsonLengthCondition('tags', '>', 2);
@@ -842,7 +842,7 @@ elements.
 **Example**:
 
 ```php
-use RedaLabs\LaravelFilters\Filters\Conditions\Concretes\JsonOverlapCondition;
+use ArchiTools\LaravelSieve\Filters\Conditions\Concretes\JsonOverlapCondition;
 
 // Check if tags overlap with ['php', 'laravel']
 $condition = new JsonOverlapCondition('tags', ['php', 'laravel']);
@@ -873,7 +873,7 @@ data.
 **Example**:
 
 ```php
-use RedaLabs\LaravelFilters\Filters\Conditions\Concretes\AggregationCondition;
+use ArchiTools\LaravelSieve\Filters\Conditions\Concretes\AggregationCondition;
 
 // Filter products with more than 5 orders
 $condition = new AggregationCondition('COUNT(id)', '>', 5);
@@ -901,7 +901,7 @@ composition.
 **Example**:
 
 ```php
-use RedaLabs\LaravelFilters\Filters\Conditions\Concretes\GroupConditions;
+use ArchiTools\LaravelSieve\Filters\Conditions\Concretes\GroupConditions;
 
 // Basic group with AND
 $group = new GroupConditions([
@@ -966,7 +966,7 @@ where (
 **Example**:
 
 ```php
-use RedaLabs\LaravelFilters\Filters\Conditions\Concretes\BetweenCondition;
+use ArchiTools\LaravelSieve\Filters\Conditions\Concretes\BetweenCondition;
 
 // Filter products with price between 10 and 100
 $condition = new BetweenCondition('price', [10,100]);
@@ -1001,7 +1001,7 @@ $condition = new BetweenCondition('total', [500, 1000], not: true);
 **Example**:
 
 ```php
-use RedaLabs\LaravelFilters\Filters\Conditions\Concretes\DateCondition;
+use ArchiTools\LaravelSieve\Filters\Conditions\Concretes\DateCondition;
 
 // Filter records created after specific date
 $condition = new DateCondition('created_at', '>', '2024-01-01');
@@ -1025,7 +1025,7 @@ $condition = new DateCondition('created_at', '=', '2024-01-01');
 **Example**:
 
 ```php
-use RedaLabs\LaravelFilters\Filters\Conditions\Concretes\InCondition;
+use ArchiTools\LaravelSieve\Filters\Conditions\Concretes\InCondition;
 
 // Filter users with specific statuses
 $condition = new InCondition('status', ['active', 'pending']);
@@ -1050,7 +1050,7 @@ $condition = new InCondition('role', ['admin', 'moderator'], not: true);
 **Example**:
 
 ```php
-use RedaLabs\LaravelFilters\Filters\Conditions\Concretes\NullCondition;
+use ArchiTools\LaravelSieve\Filters\Conditions\Concretes\NullCondition;
 
 // Filter records where deleted_at is NULL
 $condition = new NullCondition('deleted_at');
@@ -1074,7 +1074,7 @@ binding.
 **Example**:
 
 ```php
-use RedaLabs\LaravelFilters\Filters\Conditions\Concretes\RawCondition;
+use ArchiTools\LaravelSieve\Filters\Conditions\Concretes\RawCondition;
 
 // Complex condition with parameters
 $condition = new RawCondition('price > ? AND status = ?', [100, 'active']);
@@ -1098,7 +1098,7 @@ Use parameter binding (?) with RawCondition to prevent SQL injection.
 **Example**:
 
 ```php
-use RedaLabs\LaravelFilters\Filters\Conditions\Concretes\WhenCondition;
+use ArchiTools\LaravelSieve\Filters\Conditions\Concretes\WhenCondition;
 
 // Apply condition only for admin users
 $condition = new WhenCondition($isAdmin, new Condition('role', '=', 'admin'));
@@ -1121,7 +1121,7 @@ $condition = new WhenCondition($featureEnabled, new Condition('feature_id', '=',
 
 ## Joins
 
-The Laravel Filters package provides two types of joins to help you build complex queries with proper table
+The Laravel Sieve package provides two types of joins to help you build complex queries with proper table
 relationships.
 
 ### Join
@@ -1146,8 +1146,8 @@ to specify the join conditions and add additional conditions to the join clause.
 - Returns the join instance for method chaining
 
 ```php
-use RedaLabs\LaravelFilters\Filters\Joins\Concretes\Join;
-use RedaLabs\LaravelFilters\Filters\Conditions\Concretes\Condition;
+use ArchiTools\LaravelSieve\Filters\Joins\Concretes\Join;
+use ArchiTools\LaravelSieve\Filters\Conditions\Concretes\Condition;
 
 $join = (new Join('categories', 'products.category_id', '=', 'categories.id'))
    ->appendCondition(new Condition('categories.is_active', '=', true))
@@ -1166,8 +1166,8 @@ $join = (new Join('categories', 'products.category_id', '=', 'categories.id'))
 **Example**:
 
 ```php
-use RedaLabs\LaravelFilters\Filters\Joins\Concretes\Join;
-use RedaLabs\LaravelFilters\Filters\Conditions\Concretes\Condition;
+use ArchiTools\LaravelSieve\Filters\Joins\Concretes\Join;
+use ArchiTools\LaravelSieve\Filters\Conditions\Concretes\Condition;
 
 // Basic join.
 $join = new Join(
@@ -1233,7 +1233,7 @@ $join->apply($queryBuilder);
 **Example**:
 
 ```php
-use RedaLabs\LaravelFilters\Filters\Joins\Concretes\ClosureJoin;
+use ArchiTools\LaravelSieve\Filters\Joins\Concretes\ClosureJoin;
 
 // Complex join with multiple conditions
 $join = new ClosureJoin(
@@ -1299,7 +1299,7 @@ filtering scenarios.
 
 ## Sorts
 
-The Laravel Filters package provides two types of sorts to help you order your query results.
+The Laravel Sieve package provides two types of sorts to help you order your query results.
 
 ### Sort
 
@@ -1325,7 +1325,7 @@ $sort->apply($queryBuilder);
 **Example**:
 
 ```php
-use RedaLabs\LaravelFilters\Sorts\Concretes\Sort;
+use ArchiTools\LaravelSieve\Sorts\Concretes\Sort;
 
 // Sort by name in ascending order
 $sort = new Sort('name', 'ASC');
@@ -1365,7 +1365,7 @@ $sort->apply($queryBuilder);
 **Example**:
 
 ```php
-use RedaLabs\LaravelFilters\Sorts\Concretes\RawSort;
+use ArchiTools\LaravelSieve\Sorts\Concretes\RawSort;
 
 // Sort by a calculated field
 $sort = new RawSort('(price * quantity)', 'DESC');
