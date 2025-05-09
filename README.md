@@ -60,6 +60,8 @@ composer require architools/laravel-sieve
 To begin, define your own service class that extends the base `UtilitiesService` class:
 
 ```php
+namespace App\Utilities;
+
 use ArchiTools\LaravelSieve\UtilitiesService;
 
 class MyUtilitiesService extends UtilitiesService
@@ -77,6 +79,8 @@ Define available filters inside the `filters()` method of your service class. Ea
 * The **value** is either a method name to handle the filter implementation or a `Filter` instance.
 
 ```php
+namesapce App\Utilities;
+
 use ArchiTools\LaravelSieve\UtilitiesService;
 use ArchiTools\LaravelSieve\Criteria;
 use ArchiTools\LaravelSieve\Filters\Conditions\Concretes\Condition;
@@ -157,6 +161,8 @@ Appending a join with an existing name will overwrite the previous one.
 #### Example with Multiple Filters Using Joins
 
 ```php
+namespace App\Utilities;
+
 use ArchiTools\LaravelSieve\Filters\Joins\Concretes\Join;
 use ArchiTools\LaravelSieve\Filters\Conditions\Concretes\{Condition, AggregationCondition};
 use ArchiTools\LaravelSieve\UtilitiesService;
@@ -247,6 +253,8 @@ filter class to accept a column name and use it dynamically in the `apply()` met
 You can reuse it in other services too:
 
 ```php
+namespace App\Utilities;
+
 use ArchiTools\LaravelSieve\UtilitiesService;
 use App\Utilities\Filters\ProductCategoryNameFilter;
 
@@ -275,6 +283,8 @@ Define available sorts inside the `sorts()` method of your service class. Each s
     * A string representing a `column name` or `alias`, which will be used directly for sorting
 
 ```php
+namespace App\Utilities;
+
 use ArchiTools\LaravelSieve\UtilitiesService;
 use ArchiTools\LaravelSieve\Sorts\Concretes\RawSort;
 use ArchiTools\LaravelSieve\Sorts\Contracts\BaseSort;
@@ -307,6 +317,8 @@ Sorts query parameters are expected in the following format:
 * The sorts key can be customized by overriding the `$sortsKey` property:
 
 ```php
+namespace App\Utilities;
+
 use ArchiTools\LaravelSieve\UtilitiesService;
 
 class MyUtilitiesService extends UtilitiesService
@@ -324,7 +336,7 @@ class MyUtilitiesService extends UtilitiesService
 
 **Inject the service into your controller and apply filters and sorts:**
 
-```php
+```phpl
 use App\Utilities\ProductUtilitiesService;
 
 class ProductController extends Controller
