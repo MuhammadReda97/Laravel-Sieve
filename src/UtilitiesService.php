@@ -2,11 +2,11 @@
 
 namespace ArchiTools\LaravelSieve;
 
-use Illuminate\Http\Request;
 use ArchiTools\LaravelSieve\Enums\Sorts\SortDirectionEnum;
 use ArchiTools\LaravelSieve\Filters\Contracts\Filter;
 use ArchiTools\LaravelSieve\Sorts\Concretes\Sort;
 use ArchiTools\LaravelSieve\Sorts\Contracts\BaseSort;
+use Illuminate\Http\Request;
 
 /**
  * Abstract base class for implementing filtering and sorting functionality.
@@ -49,6 +49,28 @@ abstract class UtilitiesService
     {
         $this->criteria = $criteria;
         $this->queryParameters = $request->all();
+    }
+
+    /**
+     * Returns an array of available filters.
+     * Override this method to define available filters.
+     *
+     * @return Filter[]|string[] Array of filter instances or method names
+     */
+    protected function filters(): array
+    {
+        return [];
+    }
+
+    /**
+     * Returns an array of available sorts.
+     * Override this method to define available sorts.
+     *
+     * @return string[] Array of sort field names
+     */
+    protected function sorts(): array
+    {
+        return [];
     }
 
     /**
@@ -98,15 +120,6 @@ abstract class UtilitiesService
             ARRAY_FILTER_USE_KEY
         );
     }
-
-    /**
-     * Returns an array of available filters.
-     * Override this method to define available filters.
-     *
-     * @return Filter[]|string[] Array of filter instances or method names
-     */
-    abstract protected function filters(): array;
-
     /**
      * Checks if a filter has a non-empty value in the request.
      *
@@ -174,14 +187,6 @@ abstract class UtilitiesService
         }
         return $this->availableSorts = $this->sorts();
     }
-
-    /**
-     * Returns an array of available sorts.
-     * Override this method to define available sorts.
-     *
-     * @return string[] Array of sort field names
-     */
-    abstract protected function sorts(): array;
 
     /**
      * Gets the list of valid sort parameters from the request.

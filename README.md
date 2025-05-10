@@ -123,7 +123,7 @@ use ArchiTools\LaravelSieve\Filters\Joins\Concretes\Join;
 use ArchiTools\LaravelSieve\Filters\Conditions\Concretes\Condition;
 
 $criteria->appendJoin(
-    new Join('product_categories', 'categories.id = products.category_id')
+    new Join('product_categories', 'categories.id', '=', 'products.category_id')
 );
 
 $criteria->appendCondition(
@@ -138,7 +138,7 @@ use ArchiTools\LaravelSieve\Filters\Joins\Concretes\Join;
 use ArchiTools\LaravelSieve\Filters\Conditions\Concretes\Condition;
 
 $criteria->appendJoin(
-    (new Join('product_categories', 'categories.id = products.category_id'))
+    (new Join('product_categories', 'categories.id', '=', 'products.category_id'))
         ->appendCondition(new Condition('product_categories.is_active', '=', 1))
         ->appendCondition(...)
 );
@@ -151,7 +151,7 @@ already exists:
 use ArchiTools\LaravelSieve\Filters\Joins\Concretes\Join;
 
 if (!$criteria->joinExists('product_categories')) {
-    $criteria->appendJoin(new Join('product_categories', 'categories.id = products.category_id'));
+    $criteria->appendJoin(new Join('product_categories', 'categories.id', '=', 'products.category_id'));
 }
 ```
 
@@ -181,7 +181,7 @@ class MyUtilitiesService extends UtilitiesService
     public function categoryNameFilter(Criteria $criteria, mixed $value)
     {
         if (!$criteria->joinExists('product_categories')) {
-            $criteria->appendJoin(new Join('product_categories', 'categories.id = products.category_id'));
+            $criteria->appendJoin(new Join('product_categories', 'categories.id', '=', 'products.category_id'));
         }
 
         $criteria->appendCondition(new Condition('product_categories.name', 'like', "%$value%"));
@@ -192,7 +192,7 @@ class MyUtilitiesService extends UtilitiesService
         if (!$value) return;
 
         if (!$criteria->joinExists('product_categories')) {
-            $criteria->appendJoin(new Join('product_categories', 'categories.id = products.category_id'));
+            $criteria->appendJoin(new Join('product_categories', 'categories.id', '=', 'products.category_id'));
         }
 
         $criteria->appendCondition(new AggregationCondition('COUNT(product_categories.id)', '>', 1));
@@ -221,7 +221,7 @@ class ProductCategoryNameFilter implements Filter
     public function apply(Criteria $criteria, mixed $value)
     {
         if (!$criteria->joinExists('product_categories')) {
-            $criteria->appendJoin(new Join('product_categories', 'categories.id = products.category_id'));
+            $criteria->appendJoin(new Join('product_categories', 'categories.id', '=', 'products.category_id'));
         }
         $criteria->appendCondition(new Condition('product_categories.name', 'like', "%$value%"));
     }
@@ -652,8 +652,8 @@ use ArchiTools\LaravelSieve\Sorts\Concretes\Sort;
 $criteria = new Criteria();
 
 // Add multiple joins with different priorities
-$criteria->appendJoin(new Join('users', 'id', '=', 'posts.user_id', 'inner'), 100);
-$criteria->appendJoin(new Join('categories', 'id', '=', 'posts.category_id', 'left'), 200);
+$criteria->appendJoin(new Join('users', 'users.id', '=', 'posts.user_id', 'inner'), 100);
+$criteria->appendJoin(new Join('categories', 'categories.id', '=', 'posts.category_id', 'left'), 200);
 
 // Add complex conditions
 $criteria->appendCondition(new Condition('status', '=', 'active'));
