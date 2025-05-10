@@ -24,8 +24,8 @@ Designed for scalability, and developer satisfaction.
 
 # Requirements
 
-- PHP >= 8.1
-- Laravel >= 10.0
+- PHP >= 8.2
+- Laravel >= 11.0
 
 # Installation
 
@@ -50,6 +50,7 @@ composer require architools/laravel-sieve
     * [Conditions](#condition)
     * [Joins](#joins)
     * [Sorts](#sorts)
+* [Contact & Feedback](#-contact-and-feedback)
 
 ---
 
@@ -1409,7 +1410,10 @@ $sort = new RawSort('
 
 ---
 
-## License
+### 📬 Contact and Feedback
 
-MIT
- 
+We welcome your feedback and contributions!
+
+- 🐛 **Bug Reports**: [Open an issue](https://github.com/MuhammadReda97/Laravel-Sieve/issues)
+- 🌟 **Feature Requests**: [Submit a feature request](mailto:muhammadreda97@gmail.com?subject=Laravel%20Sieve%20Feature%20Request)
+- 💬 **General Feedback or Questions**: Feel free to reach out via [muhammadreda97@gmail.com](mailto:muhammadreda97@gmail.com)
