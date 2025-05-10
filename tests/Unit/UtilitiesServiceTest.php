@@ -2,12 +2,12 @@
 
 namespace Test\Unit;
 
-use Illuminate\Http\Request;
 use ArchiTools\LaravelSieve\Criteria;
 use ArchiTools\LaravelSieve\Enums\Operators\OperatorEnum;
 use ArchiTools\LaravelSieve\Enums\Sorts\SortDirectionEnum;
 use ArchiTools\LaravelSieve\Sorts\Concretes\Sort;
 use ArchiTools\LaravelSieve\Sorts\Contracts\BaseSort;
+use Illuminate\Http\Request;
 use Tests\TestCase;
 use Tests\Unit\Core\ConcreteUtilitiesService;
 
@@ -190,8 +190,9 @@ class UtilitiesServiceTest extends TestCase
                 ['field' => 'name'] // No direction provided
             ]
         ]);
-        $service = new ConcreteUtilitiesService($this->criteria, $request)
-            ->applySorts();
+        $service = new ConcreteUtilitiesService($this->criteria, $request);
+
+        $service->applySorts();
 
         $sorts = $this->getPrivateProperty($this->criteria, 'sorts');
         $this->assertEquals(SortDirectionEnum::default(), current($sorts)->getDirection());
